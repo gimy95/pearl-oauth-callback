@@ -1,0 +1,672 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<title>Pearl Al-Izdihar · Ads Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<style>
+:root{
+  --brand:#8B1538; --brand-2:#B0244F; --ink:#1A1A1A; --muted:#6B7280; --line:#E7E2E4;
+  --bg:#F7F5F4; --card:#FFFFFF; --soft:#FBF7F8; --good:#0F8A5F; --bad:#C0392B;
+  --snap:#E5B800; --tiktok:#25262B; --meta:#1877F2; --unknown:#9CA3AF;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font:14px/1.5 -apple-system,"Segoe UI",Roboto,Tahoma,Arial,sans-serif}
+html[dir=rtl] body{font-family:Tahoma,"Segoe UI",Arial,sans-serif}
+[hidden]{display:none!important}
+button{font:inherit;cursor:pointer}
+/* login */
+#login{min-height:100vh;display:grid;place-items:center;padding:20px}
+.login-card{background:var(--card);border-radius:16px;padding:32px;max-width:420px;width:100%;
+  box-shadow:0 6px 30px rgba(0,0,0,.08);text-align:center}
+.logo{width:56px;height:56px;border-radius:50%;background:var(--brand);color:#fff;font-weight:700;
+  display:grid;place-items:center;margin:0 auto 14px;font-size:18px}
+.login-card h1{font-size:20px;margin:0 0 6px}
+.login-card p{color:var(--muted);margin:6px 0 18px}
+.login-card input{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:10px;font:inherit;margin-bottom:10px}
+.btn{background:var(--brand);color:#fff;border:0;border-radius:10px;padding:11px 16px;font-weight:600}
+.btn:hover{background:var(--brand-2)}
+.btn.wide{width:100%}
+.ghost{background:transparent;border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:6px 12px}
+#login-msg{min-height:1.5em;margin-top:12px;color:var(--muted)}
+#login-msg.err{color:var(--bad)}
+/* app */
+header{background:var(--brand);color:#fff;padding:12px 20px;display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+header .logo{width:36px;height:36px;margin:0;background:#fff;color:var(--brand);font-size:13px}
+header h1{font-size:16px;margin:0;flex:1;min-width:200px}
+header .ghost{color:#fff;border-color:rgba(255,255,255,.4)}
+.who{font-size:12px;opacity:.85}
+.fresh{background:var(--soft);border-bottom:1px solid var(--line);padding:6px 20px;font-size:12px;color:var(--muted);display:flex;gap:14px;flex-wrap:wrap}
+.fresh b{color:var(--ink);font-weight:600}
+.fresh .warn{color:var(--bad)}
+nav{background:var(--card);border-bottom:1px solid var(--line);display:flex;gap:2px;padding:0 16px;overflow-x:auto}
+nav button{background:none;border:0;border-bottom:3px solid transparent;padding:12px 14px;color:var(--muted);white-space:nowrap;font-weight:500}
+nav button.on{color:var(--ink);border-bottom-color:var(--brand)}
+.filters{display:flex;gap:10px;flex-wrap:wrap;align-items:center;padding:12px 20px;background:var(--card);border-bottom:1px solid var(--line)}
+.filters label{font-size:12px;color:var(--muted)}
+.filters select,.filters input{border:1px solid var(--line);border-radius:8px;padding:6px 8px;font:inherit;background:#fff}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.seg button{background:#fff;border:0;padding:6px 12px;color:var(--muted)}
+.seg button.on{background:var(--brand);color:#fff}
+.range-note{font-size:12px;color:var(--muted);margin-inline-start:auto}
+main{padding:20px;max-width:1400px;margin:0 auto}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin-bottom:18px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.card .k{font-size:12px;color:var(--muted);font-weight:600;letter-spacing:.02em}
+.card .v{font-size:24px;font-weight:700;margin-top:4px;font-variant-numeric:tabular-nums}
+.card .s{font-size:12px;color:var(--muted);margin-top:2px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:18px}
+.panel h2{font-size:14px;margin:0 0 12px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(380px,100%),1fr));gap:18px}
+.grid2 > *{min-width:0}
+.chart{position:relative;height:280px}
+.chart.tall{height:340px}
+.tbl{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:13px;font-variant-numeric:tabular-nums}
+th{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;text-align:start;padding:8px 10px;border-bottom:2px solid var(--line);white-space:nowrap}
+td{padding:8px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
+td.wrap{white-space:normal;min-width:220px}
+td.n,th.n{text-align:end}
+tr.total td{font-weight:700;background:var(--soft)}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-inline-end:6px;vertical-align:middle}
+.tag{display:inline-block;font-size:11px;padding:1px 7px;border-radius:99px;background:#FDECEC;color:var(--bad);margin-inline-start:6px}
+.tag.info{background:#EEF2FF;color:#3730A3}
+.up{color:var(--good)} .down{color:var(--bad)} .flat{color:var(--muted)}
+.funnel{display:grid;gap:10px}
+.fstep{display:grid;grid-template-columns:150px 1fr 160px;gap:12px;align-items:center}
+.fbar{height:30px;border-radius:6px;background:var(--brand);min-width:2px}
+.fstep .lab{font-weight:600}
+.fstep .val{font-variant-numeric:tabular-nums;color:var(--muted);text-align:end}
+.notes{font-size:12px;color:var(--muted);padding:0 20px 24px;max-width:1400px;margin:0 auto}
+.notes li{margin:3px 0}
+.state{padding:60px 20px;text-align:center;color:var(--muted)}
+.state.err{color:var(--bad)}
+@media (max-width:640px){
+  main{padding:12px}
+  .cards{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .card{padding:10px 12px} .card .v{font-size:19px}
+  .fstep{grid-template-columns:80px 1fr 120px;gap:8px}
+  .grid2{grid-template-columns:minmax(0,1fr)}
+  .range-note{margin-inline-start:0;width:100%}
+  header h1{font-size:14px;min-width:0}
+}
+</style>
+</head>
+<body>
+
+<div id="login" hidden>
+  <div class="login-card">
+    <div class="logo">PC</div>
+    <h1 data-i18n="login_title"></h1>
+    <p data-i18n="login_sub"></p>
+    <form id="login-form">
+      <input type="email" id="email" required autocomplete="email" placeholder="you@example.com">
+      <button class="btn wide" type="submit" data-i18n="send_link"></button>
+    </form>
+    <div id="login-msg"></div>
+    <p><button class="ghost lang-toggle" type="button">العربية</button></p>
+  </div>
+</div>
+
+<div id="app" hidden>
+  <header>
+    <div class="logo">PC</div>
+    <h1 data-i18n="title"></h1>
+    <span class="who" id="who"></span>
+    <button class="ghost lang-toggle" type="button">العربية</button>
+    <button class="ghost" id="signout" type="button" data-i18n="sign_out"></button>
+  </header>
+  <div class="fresh" id="fresh"></div>
+  <nav id="tabs"></nav>
+  <div class="filters">
+    <label data-i18n="period"></label>
+    <select id="preset"></select>
+    <span id="custom" hidden>
+      <input type="date" id="d-start"> – <input type="date" id="d-end">
+    </span>
+    <label data-i18n="platform"></label>
+    <div class="seg" id="platforms"></div>
+    <span class="range-note" id="range-note"></span>
+  </div>
+  <main id="view"></main>
+  <ul class="notes" id="notes"></ul>
+</div>
+
+<script>
+'use strict';
+const SB_URL = 'https://bnbleiepzkxleeohugpm.supabase.co';
+const SB_KEY = 'sb_publishable_yg1uyRyFF_4aDCsaAbQYLg_WwBHaT9o';   // publishable key: safe in a web page; access is enforced in the database
+const FIRST_CRM_DAY = '2026-04-12';
+
+const PLAT = {
+  snapchat: { en: 'Snapchat', ar: 'سناب شات', color: '#E5B800' },
+  tiktok:   { en: 'TikTok',   ar: 'تيك توك',  color: '#25262B' },
+  meta:     { en: 'Meta',     ar: 'ميتا',      color: '#1877F2' },
+  unknown:  { en: 'Unknown source', ar: 'مصدر غير معروف', color: '#9CA3AF' },
+};
+const PLAT_ORDER = ['snapchat', 'tiktok', 'meta', 'unknown'];
+
+const I18N = {
+  en: {
+    title: 'Pearl Al-Izdihar — Ads Performance', login_title: 'Sign in',
+    login_sub: "Enter your email and we'll send you a sign-in link.", send_link: 'Send sign-in link',
+    sending: 'Sending…', link_sent: 'Check your inbox and open the sign-in link on this device.',
+    no_access: "This email doesn't have access to the dashboard. Ask the owner to add it.",
+    sign_out: 'Sign out', loading: 'Loading…', load_err: 'Could not load data: ',
+    overview: 'Overview', platforms: 'Platforms', campaigns: 'Campaigns & ads', funnel: 'Lead funnel',
+    monthly: 'Monthly', weekly: 'Week over week',
+    period: 'Period', platform: 'Platform', all_platforms: 'All',
+    mtd: 'Month to date', last_month: 'Last month', l7: 'Last 7 days', l30: 'Last 30 days',
+    l90: 'Last 90 days', ytd: 'Year to date', all: 'All time', custom: 'Custom',
+    spend: 'Spend', leads: 'Leads', cpl: 'CPL', bookings: 'Bookings', cpb: 'CPB',
+    booking_rate: 'Booking rate', attended: 'Attended', paid: 'Paid', no_shows: 'No-shows',
+    of_bookings: 'of bookings', of_leads: 'of leads', impressions: 'Impressions', clicks: 'Clicks / swipes',
+    ctr: 'CTR', cpc: 'CPC', cpm: 'CPM', share: 'Share of spend', sar: 'SAR',
+    ch_spend: 'Spend by platform', ch_leads: 'Leads, bookings and attendance', ch_cost: 'Cost per lead and per booking',
+    ch_platcost: 'CPL and CPB by platform', ch_share: 'Spend share', ch_stages: 'CRM stages',
+    ch_month: 'Monthly spend, leads and bookings', ch_week: 'Weekly spend, leads and bookings',
+    t_platform: 'Platform summary', t_campaigns: 'Campaigns', t_ads: 'Top 30 ads by spend',
+    t_stages: 'Stage breakdown', t_month: 'Month by month', t_week: 'Last 12 weeks', funnel_title: 'Funnel',
+    campaign: 'Campaign', ad: 'Ad', adgroup: 'Ad group', ads_n: 'Ads', objective: 'Objective',
+    conversions: 'Platform conversions', stage: 'Stage', total: 'Total', month: 'Month', week: 'Week starting',
+    change: 'vs prev.', video_views: 'video views — excluded', in_progress: 'in progress',
+    fresh_through: 'Data through', crm_import: 'CRM import', no_spend_since: 'no spend since',
+    n_vv: 'Spend excludes {x} on video-view campaigns (awareness, no leads).',
+    n_attrib: "Leads can't be tied to individual campaigns (the CRM export has no ad ID), so campaign rows show delivery and cost only.",
+    n_rules: [
+      'Spend excludes video-view campaigns. Snapchat is billed in USD and converted at 3.75 SAR.',
+      'Leads are counted by the date they were created in the CRM. A booking is every lead that booked, including no-shows; attended includes paid.',
+      'Stages keep changing as the call centre works leads, so bookings for recent weeks will still rise.',
+      'Snapchat days follow the ad account’s Los Angeles timezone; TikTok and the CRM use Riyadh/UTC days.',
+      'Leads before 12 Apr 2026 come from the earlier Google-Sheet CRM.',
+    ],
+    rng_days: '{n} days', gran_day: 'daily', gran_week: 'weekly', gran_month: 'monthly',
+  },
+  ar: {
+    title: 'عيادات بيرل الازدهار — أداء الإعلانات', login_title: 'تسجيل الدخول',
+    login_sub: 'أدخل بريدك الإلكتروني وسنرسل لك رابط الدخول.', send_link: 'أرسل رابط الدخول',
+    sending: 'جارٍ الإرسال…', link_sent: 'تحقق من بريدك وافتح رابط الدخول على هذا الجهاز.',
+    no_access: 'هذا البريد ليس لديه صلاحية الدخول إلى لوحة التحكم. اطلب من المسؤول إضافته.',
+    sign_out: 'تسجيل الخروج', loading: 'جارٍ التحميل…', load_err: 'تعذّر تحميل البيانات: ',
+    overview: 'نظرة عامة', platforms: 'المنصات', campaigns: 'الحملات والإعلانات', funnel: 'مسار العملاء',
+    monthly: 'شهري', weekly: 'أسبوعي',
+    period: 'الفترة', platform: 'المنصة', all_platforms: 'الكل',
+    mtd: 'الشهر الحالي', last_month: 'الشهر الماضي', l7: 'آخر 7 أيام', l30: 'آخر 30 يوماً',
+    l90: 'آخر 90 يوماً', ytd: 'منذ بداية السنة', all: 'كل الفترة', custom: 'مخصص',
+    spend: 'الإنفاق', leads: 'الليدز', cpl: 'تكلفة الليد', bookings: 'الحجوزات', cpb: 'تكلفة الحجز',
+    booking_rate: 'معدل الحجز', attended: 'حضر', paid: 'تم الدفع', no_shows: 'لم يحضر',
+    of_bookings: 'من الحجوزات', of_leads: 'من الليدز', impressions: 'مرات الظهور', clicks: 'النقرات',
+    ctr: 'نسبة النقر', cpc: 'تكلفة النقرة', cpm: 'تكلفة الألف ظهور', share: 'حصة الإنفاق', sar: 'ريال',
+    ch_spend: 'الإنفاق حسب المنصة', ch_leads: 'الليدز والحجوزات والحضور', ch_cost: 'تكلفة الليد والحجز',
+    ch_platcost: 'تكلفة الليد والحجز حسب المنصة', ch_share: 'توزيع الإنفاق', ch_stages: 'مراحل CRM',
+    ch_month: 'الإنفاق والليدز والحجوزات شهرياً', ch_week: 'الإنفاق والليدز والحجوزات أسبوعياً',
+    t_platform: 'ملخص المنصات', t_campaigns: 'الحملات', t_ads: 'أعلى 30 إعلاناً إنفاقاً',
+    t_stages: 'توزيع المراحل', t_month: 'حسب الشهر', t_week: 'آخر 12 أسبوعاً', funnel_title: 'المسار',
+    campaign: 'الحملة', ad: 'الإعلان', adgroup: 'المجموعة', ads_n: 'الإعلانات', objective: 'الهدف',
+    conversions: 'تحويلات المنصة', stage: 'المرحلة', total: 'الإجمالي', month: 'الشهر', week: 'بداية الأسبوع',
+    change: 'مقارنة بالسابق', video_views: 'مشاهدات فيديو — مستبعدة', in_progress: 'جارٍ',
+    fresh_through: 'البيانات حتى', crm_import: 'آخر استيراد CRM', no_spend_since: 'لا إنفاق منذ',
+    n_vv: 'الإنفاق لا يشمل {x} على حملات مشاهدات الفيديو (حملات وعي لا تجلب ليدز).',
+    n_attrib: 'لا يمكن ربط الليدز بحملة محددة (ملف CRM لا يحتوي على رقم الإعلان)، لذلك تعرض الحملات الظهور والتكلفة فقط.',
+    n_rules: [
+      'الإنفاق لا يشمل حملات مشاهدات الفيديو. سناب شات بالدولار ويُحوّل بسعر 3.75 ريال.',
+      'تُحسب الليدز بتاريخ إنشائها في CRM. الحجز يشمل كل من حجز بما فيهم من لم يحضر، والحضور يشمل من دفع.',
+      'المراحل تتغير مع متابعة الكول سنتر، لذلك ستزيد حجوزات الأسابيع الأخيرة.',
+      'أيام سناب شات تتبع توقيت لوس أنجلوس الخاص بالحساب، بينما تيك توك وCRM بتوقيت الرياض/UTC.',
+      'الليدز قبل 12 أبريل 2026 من ملف Google Sheet السابق.',
+    ],
+    rng_days: '{n} يوماً', gran_day: 'يومي', gran_week: 'أسبوعي', gran_month: 'شهري',
+  },
+};
+
+// ───────── state ─────────
+const store = {
+  get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+  set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} },
+};
+const S = { lang: store.get('pearl_lang') || 'en', tab: store.get('pearl_tab') || 'overview',
+            preset: 'mtd', start: null, end: null, platform: 'all',
+            info: [], daily: [], firstDay: '2026-01-01', stages: [], ads: [], rangeKey: null, user: null, test: false };
+const TABS = ['overview', 'platforms', 'campaigns', 'funnel', 'monthly', 'weekly'];
+const PRESETS = ['mtd', 'last_month', 'l7', 'l30', 'l90', 'ytd', 'all', 'custom'];
+
+let sb = null;
+try { sb = window.supabase.createClient(SB_URL, SB_KEY, { auth: { persistSession: true, detectSessionInUrl: true } }); }
+catch (e) { console.error('Supabase client failed to load', e); }
+
+// ───────── helpers ─────────
+const $ = (id) => document.getElementById(id);
+function t(k) { const d = I18N[S.lang] || I18N.en; return d[k] !== undefined ? d[k] : (I18N.en[k] !== undefined ? I18N.en[k] : k); }
+function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
+function pname(p) { return (PLAT[p] || PLAT.unknown)[S.lang] || p; }
+function pcolor(p) { return (PLAT[p] || PLAT.unknown).color; }
+const nf0 = new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 });
+const nf2 = new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+function money(v, dec) { if (v == null || !isFinite(v)) return '—'; return (dec ? nf2 : nf0).format(v) + ' ' + t('sar'); }
+function num(v) { return v == null || !isFinite(v) ? '—' : nf0.format(v); }
+function pct(v, d = 1) { return v == null || !isFinite(v) ? '—' : (v * 100).toFixed(d) + '%'; }
+function riyadhToday() {
+  return new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Riyadh', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date());
+}
+function s2d(s) { return new Date(s + 'T00:00:00Z'); }
+function d2s(d) { return d.toISOString().slice(0, 10); }
+function addDays(s, n) { const d = s2d(s); d.setUTCDate(d.getUTCDate() + n); return d2s(d); }
+function daysBetween(a, b) { return Math.round((s2d(b) - s2d(a)) / 864e5) + 1; }
+const LOCALE = () => S.lang === 'ar' ? 'ar-u-ca-gregory-nu-latn' : 'en-GB';
+function dateLabel(s) { return s2d(s).toLocaleDateString(LOCALE(), { day: 'numeric', month: 'short', timeZone: 'UTC' }); }
+function monthLabel(s) { return s2d(s).toLocaleDateString(LOCALE(), { month: 'short', year: 'numeric', timeZone: 'UTC' }); }
+function fullDate(s) { return s2d(s).toLocaleDateString(LOCALE(), { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' }); }
+
+function presetRange(p) {
+  const today = riyadhToday(); const d = s2d(today);
+  switch (p) {
+    case 'mtd': return [today.slice(0, 8) + '01', today];
+    case 'last_month': return [d2s(new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth() - 1, 1))),
+                               d2s(new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), 0)))];
+    case 'l7': return [addDays(today, -6), today];
+    case 'l30': return [addDays(today, -29), today];
+    case 'l90': return [addDays(today, -89), today];
+    case 'ytd': return [today.slice(0, 4) + '-01-01', today];
+    case 'all': return [S.firstDay, today];
+    default: return [S.start || today.slice(0, 8) + '01', S.end || today];
+  }
+}
+
+// ───────── data ─────────
+async function rpcAll(fn, args) {
+  if (S.test) return (window.__TESTDATA__ || {})[fn] || [];
+  const page = 1000; let from = 0, out = [];
+  for (;;) {
+    const { data, error } = await sb.rpc(fn, args).range(from, from + page - 1);
+    if (error) throw error;
+    out = out.concat(data || []);
+    if (!data || data.length < page) break;
+    from += page;
+  }
+  return out;
+}
+async function loadBase() {
+  S.info = await rpcAll('dash_info', {});
+  const firsts = S.info.map(r => r.first_data_day).filter(Boolean).sort();
+  S.firstDay = firsts[0] || '2026-01-01';
+  S.daily = (await rpcAll('dash_daily', { p_start: S.firstDay, p_end: riyadhToday() }))
+    .map(r => ({ ...r, day: String(r.day).slice(0, 10) }));
+}
+async function loadRange() {
+  const key = S.start + '|' + S.end;
+  if (S.rangeKey === key) return;
+  const [st, ad] = await Promise.all([
+    rpcAll('dash_stages', { p_start: S.start, p_end: S.end }),
+    rpcAll('dash_ads', { p_start: S.start, p_end: S.end }),
+  ]);
+  S.stages = st; S.ads = ad; S.rangeKey = key;
+}
+
+// ───────── aggregation ─────────
+function inPlat(p) { return S.platform === 'all' || p === S.platform; }
+function sumRows(rows) {
+  const z = { spend: 0, vv: 0, imp: 0, clk: 0, leads: 0, book: 0, att: 0, paid: 0, ns: 0 };
+  for (const r of rows) {
+    z.spend += +r.spend_sar || 0; z.vv += +r.video_views_spend_sar || 0; z.imp += +r.impressions || 0;
+    z.clk += +r.clicks || 0; z.leads += +r.leads || 0; z.book += +r.bookings || 0;
+    z.att += +r.attended || 0; z.paid += +r.paid || 0; z.ns += +r.no_shows || 0;
+  }
+  return ratios(z);
+}
+function ratios(z) {
+  return Object.assign(z, {
+    cpl: z.leads ? z.spend / z.leads : null, cpb: z.book ? z.spend / z.book : null,
+    br: z.leads ? z.book / z.leads : null, ar: z.book ? z.att / z.book : null, nsr: z.book ? z.ns / z.book : null,
+    ctr: z.imp ? z.clk / z.imp : null, cpc: z.clk ? z.spend / z.clk : null, cpm: z.imp ? z.spend / z.imp * 1000 : null,
+  });
+}
+function rowsIn(start, end, plat = true) { return S.daily.filter(r => r.day >= start && r.day <= end && (!plat || inPlat(r.platform))); }
+function granularity(start, end) { const n = daysBetween(start, end); return n <= 62 ? 'day' : n <= 370 ? 'week' : 'month'; }
+function bucketKey(s, g) {
+  if (g === 'day') return s;
+  if (g === 'month') return s.slice(0, 7) + '-01';
+  const d = s2d(s); d.setUTCDate(d.getUTCDate() - d.getUTCDay()); return d2s(d);   // week starts Sunday
+}
+function buckets(rows, g, start, end) {
+  const keys = [], seen = new Set();
+  for (let cur = start; cur <= end; cur = addDays(cur, 1)) { const k = bucketKey(cur, g); if (!seen.has(k)) { seen.add(k); keys.push(k); } }
+  const m = {}; keys.forEach(k => m[k] = []);
+  rows.forEach(r => { const k = bucketKey(r.day, g); if (m[k]) m[k].push(r); });
+  return { keys, m };
+}
+function bucketLabel(k, g) { return g === 'month' ? monthLabel(k) : dateLabel(k); }
+function activePlatforms(rows) {
+  return PLAT_ORDER.filter(p => rows.some(r => r.platform === p && ((+r.spend_sar || 0) > 0 || (+r.leads || 0) > 0)));
+}
+
+// ───────── charts ─────────
+const charts = {};
+function chart(id, cfg) {
+  if (charts[id]) charts[id].destroy();
+  const el = $(id); if (!el || !window.Chart) return;
+  charts[id] = new Chart(el, cfg);
+}
+function destroyCharts() { for (const k in charts) { charts[k].destroy(); delete charts[k]; } }
+function baseOpts({ stacked = false, y2 = false, yMoney = false } = {}) {
+  const rtl = S.lang === 'ar';
+  const o = {
+    responsive: true, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false },
+    plugins: { legend: { position: 'bottom', rtl, labels: { boxWidth: 12 } }, tooltip: { rtl,
+      callbacks: { label: (c) => `${c.dataset.label}: ${c.dataset._money ? money(c.parsed.y, true) : num(c.parsed.y)}` } } },
+    scales: {
+      x: { stacked, reverse: rtl, grid: { display: false } },
+      y: { stacked, beginAtZero: true, position: rtl ? 'right' : 'left',
+           ticks: { callback: (v) => yMoney ? nf0.format(v) : nf0.format(v) } },
+    },
+  };
+  if (y2) o.scales.y2 = { beginAtZero: true, position: rtl ? 'left' : 'right', grid: { drawOnChartArea: false } };
+  return o;
+}
+
+// ───────── views ─────────
+function card(k, v, s) { return `<div class="card"><div class="k">${esc(k)}</div><div class="v">${v}</div>${s ? `<div class="s">${s}</div>` : ''}</div>`; }
+function delta(cur, prev, lowerIsBetter) {
+  if (cur == null || prev == null || !isFinite(cur) || !isFinite(prev) || prev === 0) return '<span class="flat">—</span>';
+  const d = (cur - prev) / Math.abs(prev); const good = lowerIsBetter ? d < 0 : d > 0;
+  const cls = Math.abs(d) < 0.005 ? 'flat' : good ? 'up' : 'down';
+  return `<span class="${cls}">${d > 0 ? '▲' : d < 0 ? '▼' : '•'} ${Math.abs(d * 100).toFixed(1)}%</span>`;
+}
+
+function viewOverview() {
+  const rows = rowsIn(S.start, S.end); const z = sumRows(rows);
+  const g = granularity(S.start, S.end); const { keys, m } = buckets(rows, g, S.start, S.end);
+  const plats = activePlatforms(rows).filter(p => p !== 'unknown');
+  const html = `
+    <div class="cards">
+      ${card(t('spend'), money(z.spend))}
+      ${card(t('leads'), num(z.leads))}
+      ${card(t('cpl'), money(z.cpl, true))}
+      ${card(t('bookings'), num(z.book), `${pct(z.br)} ${t('of_leads')}`)}
+      ${card(t('cpb'), money(z.cpb, true))}
+      ${card(t('attended'), num(z.att), `${pct(z.ar)} ${t('of_bookings')}`)}
+      ${card(t('paid'), num(z.paid))}
+      ${card(t('no_shows'), num(z.ns), `${pct(z.nsr)} ${t('of_bookings')}`)}
+    </div>
+    <div class="grid2">
+      <div class="panel"><h2>${t('ch_spend')}</h2><div class="chart"><canvas id="c_spend"></canvas></div></div>
+      <div class="panel"><h2>${t('ch_leads')}</h2><div class="chart"><canvas id="c_leads"></canvas></div></div>
+    </div>
+    <div class="panel"><h2>${t('ch_cost')}</h2><div class="chart"><canvas id="c_cost"></canvas></div></div>`;
+  $('view').innerHTML = html;
+  const labels = keys.map(k => bucketLabel(k, g));
+  chart('c_spend', { type: 'bar', data: { labels, datasets: plats.map(p => ({
+      label: pname(p), _money: true, backgroundColor: pcolor(p), stack: 's',
+      data: keys.map(k => sumRows(m[k].filter(r => r.platform === p)).spend) })) },
+    options: baseOpts({ stacked: true, yMoney: true }) });
+  chart('c_leads', { type: 'line', data: { labels, datasets: [
+      { label: t('leads'), data: keys.map(k => sumRows(m[k]).leads), borderColor: '#8B1538', backgroundColor: '#8B1538', tension: .25 },
+      { label: t('bookings'), data: keys.map(k => sumRows(m[k]).book), borderColor: '#0F8A5F', backgroundColor: '#0F8A5F', tension: .25 },
+      { label: t('attended'), data: keys.map(k => sumRows(m[k]).att), borderColor: '#2563EB', backgroundColor: '#2563EB', tension: .25 },
+    ] }, options: baseOpts() });
+  chart('c_cost', { type: 'line', data: { labels, datasets: [
+      { label: t('cpl'), _money: true, data: keys.map(k => sumRows(m[k]).cpl), borderColor: '#8B1538', backgroundColor: '#8B1538', spanGaps: true, tension: .25 },
+      { label: t('cpb'), _money: true, data: keys.map(k => sumRows(m[k]).cpb), borderColor: '#B45309', backgroundColor: '#B45309', spanGaps: true, tension: .25, yAxisID: 'y2' },
+    ] }, options: baseOpts({ y2: true, yMoney: true }) });
+  return z;
+}
+
+function viewPlatforms() {
+  const all = rowsIn(S.start, S.end, false); const plats = activePlatforms(all);
+  const tot = sumRows(all);
+  const body = plats.map(p => { const z = sumRows(all.filter(r => r.platform === p)); return `<tr>
+      <td><span class="dot" style="background:${pcolor(p)}"></span>${esc(pname(p))}</td>
+      <td class="n">${money(z.spend)}</td><td class="n">${pct(tot.spend ? z.spend / tot.spend : null)}</td>
+      <td class="n">${num(z.imp)}</td><td class="n">${num(z.clk)}</td><td class="n">${pct(z.ctr, 2)}</td>
+      <td class="n">${money(z.cpc, true)}</td><td class="n">${num(z.leads)}</td><td class="n">${money(z.cpl, true)}</td>
+      <td class="n">${num(z.book)}</td><td class="n">${money(z.cpb, true)}</td><td class="n">${pct(z.br)}</td>
+      <td class="n">${num(z.att)}</td><td class="n">${num(z.ns)}</td></tr>`; }).join('');
+  $('view').innerHTML = `
+    <div class="panel"><h2>${t('t_platform')}</h2><div class="tbl"><table>
+      <thead><tr><th>${t('platform')}</th><th class="n">${t('spend')}</th><th class="n">${t('share')}</th>
+        <th class="n">${t('impressions')}</th><th class="n">${t('clicks')}</th><th class="n">${t('ctr')}</th><th class="n">${t('cpc')}</th>
+        <th class="n">${t('leads')}</th><th class="n">${t('cpl')}</th><th class="n">${t('bookings')}</th><th class="n">${t('cpb')}</th>
+        <th class="n">${t('booking_rate')}</th><th class="n">${t('attended')}</th><th class="n">${t('no_shows')}</th></tr></thead>
+      <tbody>${body}<tr class="total"><td>${t('total')}</td><td class="n">${money(tot.spend)}</td><td class="n">100%</td>
+        <td class="n">${num(tot.imp)}</td><td class="n">${num(tot.clk)}</td><td class="n">${pct(tot.ctr, 2)}</td><td class="n">${money(tot.cpc, true)}</td>
+        <td class="n">${num(tot.leads)}</td><td class="n">${money(tot.cpl, true)}</td><td class="n">${num(tot.book)}</td>
+        <td class="n">${money(tot.cpb, true)}</td><td class="n">${pct(tot.br)}</td><td class="n">${num(tot.att)}</td><td class="n">${num(tot.ns)}</td></tr></tbody>
+    </table></div></div>
+    <div class="grid2">
+      <div class="panel"><h2>${t('ch_platcost')}</h2><div class="chart"><canvas id="c_pcost"></canvas></div></div>
+      <div class="panel"><h2>${t('ch_share')}</h2><div class="chart"><canvas id="c_share"></canvas></div></div>
+    </div>`;
+  const sp = plats.filter(p => p !== 'unknown');
+  chart('c_pcost', { type: 'bar', data: { labels: sp.map(pname), datasets: [
+      { label: t('cpl'), _money: true, data: sp.map(p => sumRows(all.filter(r => r.platform === p)).cpl), backgroundColor: '#8B1538' },
+      { label: t('cpb'), _money: true, data: sp.map(p => sumRows(all.filter(r => r.platform === p)).cpb), backgroundColor: '#D97706' },
+    ] }, options: baseOpts({ yMoney: true }) });
+  chart('c_share', { type: 'doughnut', data: { labels: sp.map(pname), datasets: [{
+      data: sp.map(p => sumRows(all.filter(r => r.platform === p)).spend), backgroundColor: sp.map(pcolor) }] },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', rtl: S.lang === 'ar' },
+      tooltip: { callbacks: { label: (c) => `${c.label}: ${money(c.parsed)}` } } } } });
+}
+
+function viewCampaigns() {
+  const ads = S.ads.filter(a => inPlat(a.platform));
+  const camps = {};
+  for (const a of ads) {
+    const k = a.platform + '|' + a.campaign_name;
+    const c = camps[k] || (camps[k] = { platform: a.platform, name: a.campaign_name, objective: a.campaign_objective,
+      vv: false, spend: 0, imp: 0, clk: 0, conv: 0, n: 0, hasConv: false });
+    c.spend += +a.spend_sar || 0; c.imp += +a.impressions || 0; c.clk += +a.clicks || 0; c.n += 1;
+    if (a.conversions != null) { c.conv += +a.conversions || 0; c.hasConv = true; }
+    c.vv = c.vv || !!a.is_video_views; c.objective = c.objective || a.campaign_objective;
+  }
+  const list = Object.values(camps).sort((a, b) => b.spend - a.spend);
+  const crow = c => `<tr><td><span class="dot" style="background:${pcolor(c.platform)}"></span>${esc(pname(c.platform))}</td>
+      <td class="wrap">${esc(c.name)}${c.vv ? `<span class="tag">${t('video_views')}</span>` : ''}</td>
+      <td>${esc(c.objective || '')}</td><td class="n">${money(c.spend)}</td><td class="n">${num(c.imp)}</td>
+      <td class="n">${num(c.clk)}</td><td class="n">${pct(c.imp ? c.clk / c.imp : null, 2)}</td>
+      <td class="n">${money(c.clk ? c.spend / c.clk : null, true)}</td><td class="n">${c.hasConv ? num(c.conv) : '—'}</td>
+      <td class="n">${c.n}</td></tr>`;
+  const top = ads.slice().sort((a, b) => (+b.spend_sar || 0) - (+a.spend_sar || 0)).slice(0, 30);
+  const arow = a => `<tr><td><span class="dot" style="background:${pcolor(a.platform)}"></span>${esc(pname(a.platform))}</td>
+      <td class="wrap">${esc(a.ad_name || a.ad_id)}</td><td class="wrap">${esc(a.campaign_name)}${a.is_video_views ? `<span class="tag">${t('video_views')}</span>` : ''}</td>
+      <td class="n">${money(+a.spend_sar)}</td><td class="n">${num(+a.impressions)}</td><td class="n">${num(+a.clicks)}</td>
+      <td class="n">${pct(+a.impressions ? +a.clicks / +a.impressions : null, 2)}</td></tr>`;
+  $('view').innerHTML = `
+    <div class="panel"><h2>${t('t_campaigns')}</h2><p class="s" style="color:var(--muted);margin-top:-6px">${esc(t('n_attrib'))}</p>
+      <div class="tbl"><table><thead><tr><th>${t('platform')}</th><th>${t('campaign')}</th><th>${t('objective')}</th>
+        <th class="n">${t('spend')}</th><th class="n">${t('impressions')}</th><th class="n">${t('clicks')}</th><th class="n">${t('ctr')}</th>
+        <th class="n">${t('cpc')}</th><th class="n">${t('conversions')}</th><th class="n">${t('ads_n')}</th></tr></thead>
+        <tbody>${list.map(crow).join('') || `<tr><td colspan="10">—</td></tr>`}</tbody></table></div></div>
+    <div class="panel"><h2>${t('t_ads')}</h2><div class="tbl"><table><thead><tr><th>${t('platform')}</th><th>${t('ad')}</th>
+        <th>${t('campaign')}</th><th class="n">${t('spend')}</th><th class="n">${t('impressions')}</th><th class="n">${t('clicks')}</th>
+        <th class="n">${t('ctr')}</th></tr></thead><tbody>${top.map(arow).join('') || `<tr><td colspan="7">—</td></tr>`}</tbody></table></div></div>`;
+}
+
+function viewFunnel() {
+  const z = sumRows(rowsIn(S.start, S.end));
+  const steps = [[t('leads'), z.leads, 1], [t('bookings'), z.book, z.br], [t('attended'), z.att, z.leads ? z.att / z.leads : null],
+                 [t('paid'), z.paid, z.leads ? z.paid / z.leads : null]];
+  const max = Math.max(z.leads, 1);
+  const stages = S.stages.filter(s => inPlat(s.platform));
+  const byLabel = {};
+  for (const s of stages) {
+    const label = S.lang === 'ar' ? s.label_ar : s.label_en;
+    const e = byLabel[label] || (byLabel[label] = { label, sort: s.sort_order, booked: s.is_booked, total: 0, per: {} });
+    e.total += +s.leads; e.per[s.platform] = (e.per[s.platform] || 0) + (+s.leads); e.sort = Math.min(e.sort, s.sort_order);
+  }
+  const rows = Object.values(byLabel).sort((a, b) => b.total - a.total);
+  const plats = PLAT_ORDER.filter(p => stages.some(s => s.platform === p));
+  const total = rows.reduce((a, r) => a + r.total, 0);
+  $('view').innerHTML = `
+    <div class="panel"><h2>${t('funnel_title')}</h2><div class="funnel">
+      ${steps.map(([lab, v, r]) => `<div class="fstep"><div class="lab">${esc(lab)}</div>
+        <div><div class="fbar" style="width:${Math.max(0.5, v / max * 100)}%"></div></div>
+        <div class="val">${num(v)} · ${pct(r)} ${t('of_leads')}</div></div>`).join('')}
+      <div class="fstep"><div class="lab">${t('no_shows')}</div><div><div class="fbar" style="background:#C0392B;width:${Math.max(0.5, z.ns / max * 100)}%"></div></div>
+        <div class="val">${num(z.ns)} · ${pct(z.nsr)} ${t('of_bookings')}</div></div>
+    </div></div>
+    <div class="grid2">
+      <div class="panel"><h2>${t('t_stages')}</h2><div class="tbl"><table><thead><tr><th>${t('stage')}</th>
+        ${plats.map(p => `<th class="n">${esc(pname(p))}</th>`).join('')}<th class="n">${t('total')}</th><th class="n">%</th></tr></thead>
+        <tbody>${rows.map(r => `<tr><td>${esc(r.label)}${r.booked ? ' <span class="tag info">' + t('bookings') + '</span>' : ''}</td>
+          ${plats.map(p => `<td class="n">${num(r.per[p] || 0)}</td>`).join('')}<td class="n">${num(r.total)}</td>
+          <td class="n">${pct(total ? r.total / total : null)}</td></tr>`).join('')}
+          <tr class="total"><td>${t('total')}</td>${plats.map(p => `<td class="n">${num(stages.filter(s => s.platform === p).reduce((a, s) => a + (+s.leads), 0))}</td>`).join('')}
+          <td class="n">${num(total)}</td><td class="n">100%</td></tr></tbody></table></div></div>
+      <div class="panel"><h2>${t('ch_stages')}</h2><div class="chart tall"><canvas id="c_stages"></canvas></div></div>
+    </div>`;
+  const pal = ['#8B1538', '#0F8A5F', '#2563EB', '#D97706', '#7C3AED', '#0891B2', '#DB2777', '#65A30D', '#9CA3AF', '#B45309', '#475569', '#E11D48', '#14B8A6'];
+  chart('c_stages', { type: 'doughnut', data: { labels: rows.map(r => r.label), datasets: [{ data: rows.map(r => r.total),
+      backgroundColor: rows.map((_, i) => pal[i % pal.length]) }] },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', rtl: S.lang === 'ar', labels: { boxWidth: 10 } } } } });
+}
+
+function periodTable(keys, m, g, labelFn, title, chartTitle, chartId) {
+  const today = riyadhToday();
+  const rows = keys.map(k => ({ k, z: sumRows(m[k]) }));
+  const partial = (k) => g === 'month' ? today.slice(0, 7) === k.slice(0, 7) : (k <= today && addDays(k, 6) >= today);
+  const body = rows.map((r, i) => { const p = i > 0 ? rows[i - 1].z : null; const z = r.z; return `<tr>
+      <td>${esc(labelFn(r.k))}${partial(r.k) ? ` <span class="tag info">${t('in_progress')}</span>` : ''}</td>
+      <td class="n">${money(z.spend)}</td><td class="n">${p ? delta(z.spend, p.spend, false) : ''}</td>
+      <td class="n">${num(z.leads)}</td><td class="n">${p ? delta(z.leads, p.leads, false) : ''}</td>
+      <td class="n">${money(z.cpl, true)}</td><td class="n">${p ? delta(z.cpl, p.cpl, true) : ''}</td>
+      <td class="n">${num(z.book)}</td><td class="n">${money(z.cpb, true)}</td><td class="n">${p ? delta(z.cpb, p.cpb, true) : ''}</td>
+      <td class="n">${pct(z.br)}</td><td class="n">${num(z.att)}</td></tr>`; }).reverse().join('');
+  $('view').innerHTML = `
+    <div class="panel"><h2>${chartTitle}</h2><div class="chart tall"><canvas id="${chartId}"></canvas></div></div>
+    <div class="panel"><h2>${title}</h2><div class="tbl"><table><thead><tr>
+      <th>${g === 'month' ? t('month') : t('week')}</th><th class="n">${t('spend')}</th><th class="n">${t('change')}</th>
+      <th class="n">${t('leads')}</th><th class="n">${t('change')}</th><th class="n">${t('cpl')}</th><th class="n">${t('change')}</th>
+      <th class="n">${t('bookings')}</th><th class="n">${t('cpb')}</th><th class="n">${t('change')}</th>
+      <th class="n">${t('booking_rate')}</th><th class="n">${t('attended')}</th></tr></thead><tbody>${body}</tbody></table></div></div>`;
+  const labels = rows.map(r => labelFn(r.k));
+  chart(chartId, { data: { labels, datasets: [
+      { type: 'bar', label: t('spend'), _money: true, data: rows.map(r => r.z.spend), backgroundColor: 'rgba(139,21,56,.75)', yAxisID: 'y' },
+      { type: 'line', label: t('leads'), data: rows.map(r => r.z.leads), borderColor: '#2563EB', backgroundColor: '#2563EB', yAxisID: 'y2', tension: .25 },
+      { type: 'line', label: t('bookings'), data: rows.map(r => r.z.book), borderColor: '#0F8A5F', backgroundColor: '#0F8A5F', yAxisID: 'y2', tension: .25 },
+    ] }, options: baseOpts({ y2: true, yMoney: true }) });
+}
+function viewMonthly() {
+  const today = riyadhToday();
+  const { keys, m } = buckets(rowsIn(S.firstDay, today), 'month', S.firstDay, today);
+  periodTable(keys, m, 'month', monthLabel, t('t_month'), t('ch_month'), 'c_month');
+}
+function viewWeekly() {
+  const today = riyadhToday(); const start = bucketKey(addDays(today, -7 * 11), 'week');
+  const { keys, m } = buckets(rowsIn(start, today), 'week', start, today);
+  periodTable(keys, m, 'week', dateLabel, t('t_week'), t('ch_week'), 'c_week');
+}
+
+// ───────── chrome ─────────
+function renderFresh() {
+  const parts = [];
+  const recent = addDays(riyadhToday(), -45);
+  for (const r of S.info) {
+    if (r.source === 'crm') {
+      const ts = r.last_loaded_at ? new Date(r.last_loaded_at).toLocaleString(LOCALE(), { timeZone: 'Asia/Riyadh', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) : '—';
+      parts.push(`${t('crm_import')}: <b>${esc(ts)}</b>`);
+    } else if (r.last_data_day) {
+      const p = r.source.replace('spend:', ''); const d = String(r.last_data_day).slice(0, 10);
+      parts.push(d >= recent ? `${esc(pname(p))}: <b>${esc(fullDate(d))}</b>`
+                             : `<span class="warn">${esc(pname(p))}: ${t('no_spend_since')} ${esc(fullDate(d))}</span>`);
+    }
+  }
+  $('fresh').innerHTML = `<span>${t('fresh_through')} →</span>` + parts.map(p => `<span>${p}</span>`).join('');
+}
+function renderChrome() {
+  document.documentElement.lang = S.lang; document.documentElement.dir = S.lang === 'ar' ? 'rtl' : 'ltr';
+  document.title = t('title');
+  document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = t(el.dataset.i18n); });
+  document.querySelectorAll('.lang-toggle').forEach(b => { b.textContent = S.lang === 'ar' ? 'English' : 'العربية'; });
+  $('tabs').innerHTML = TABS.map(k => `<button data-tab="${k}" class="${S.tab === k ? 'on' : ''}">${t(k)}</button>`).join('');
+  $('preset').innerHTML = PRESETS.map(p => `<option value="${p}" ${S.preset === p ? 'selected' : ''}>${t(p)}</option>`).join('');
+  $('custom').hidden = S.preset !== 'custom';
+  $('d-start').value = S.start || ''; $('d-end').value = S.end || '';
+  $('platforms').innerHTML = ['all', 'snapchat', 'tiktok', 'meta'].map(p =>
+    `<button data-plat="${p}" class="${S.platform === p ? 'on' : ''}">${p === 'all' ? t('all_platforms') : esc(pname(p))}</button>`).join('');
+  const g = granularity(S.start, S.end);
+  $('range-note').textContent = S.start ? `${fullDate(S.start)} – ${fullDate(S.end)} · ${t('rng_days').replace('{n}', daysBetween(S.start, S.end))} · ${t('gran_' + g)}` : '';
+  $('notes').innerHTML = t('n_rules').map(n => `<li>${esc(n)}</li>`).join('');
+  renderFresh();
+}
+async function refresh() {
+  renderChrome(); destroyCharts();
+  const needsRange = S.tab === 'campaigns' || S.tab === 'funnel';
+  if (needsRange && S.rangeKey !== S.start + '|' + S.end) {
+    $('view').innerHTML = `<div class="state">${t('loading')}</div>`;
+    try { await loadRange(); } catch (e) { return showErr(e); }
+  }
+  const z = { overview: viewOverview, platforms: viewPlatforms, campaigns: viewCampaigns, funnel: viewFunnel,
+              monthly: viewMonthly, weekly: viewWeekly }[S.tab]();
+  const vv = sumRows(rowsIn(S.start, S.end)).vv;
+  if (vv > 0 && (S.tab === 'overview' || S.tab === 'platforms' || S.tab === 'campaigns')) {
+    $('notes').insertAdjacentHTML('afterbegin', `<li>${esc(t('n_vv').replace('{x}', money(vv)))}</li>`);
+  }
+}
+function setPreset(p) { S.preset = p; if (p !== 'custom') { [S.start, S.end] = presetRange(p); } }
+function showErr(e) {
+  const msg = (e && (e.message || e.error_description)) || String(e);
+  const denied = /not authorized|permission denied|42501/i.test(msg + ' ' + (e && e.code));
+  $('view').innerHTML = `<div class="state err">${esc(denied ? t('no_access') : t('load_err') + msg)}</div>`;
+}
+
+// ───────── auth + startup ─────────
+function showLogin() { $('app').hidden = true; $('login').hidden = false; renderChrome(); }
+async function startApp(user) {
+  S.user = user; $('login').hidden = true; $('app').hidden = false;
+  $('who').textContent = user && user.email ? user.email : '';
+  setPreset(S.preset); renderChrome();
+  $('view').innerHTML = `<div class="state">${t('loading')}</div>`;
+  try { await loadBase(); setPreset(S.preset); await refresh(); } catch (e) { renderChrome(); showErr(e); }
+}
+
+document.addEventListener('click', async (ev) => {
+  const el = ev.target.closest('button'); if (!el) return;
+  if (el.classList.contains('lang-toggle')) { S.lang = S.lang === 'ar' ? 'en' : 'ar'; store.set('pearl_lang', S.lang);
+    if (!$('app').hidden) await refresh(); else renderChrome(); return; }
+  if (el.dataset.tab) { S.tab = el.dataset.tab; store.set('pearl_tab', S.tab); await refresh(); return; }
+  if (el.dataset.plat) { S.platform = el.dataset.plat; await refresh(); return; }
+  if (el.id === 'signout') { if (sb && !S.test) await sb.auth.signOut(); S.user = null; showLogin(); }
+});
+$('preset').addEventListener('change', async (e) => { setPreset(e.target.value); await refresh(); });
+['d-start', 'd-end'].forEach(id => $(id).addEventListener('change', async () => {
+  const a = $('d-start').value, b = $('d-end').value;
+  if (a && b && a <= b) { S.start = a; S.end = b; await refresh(); }
+}));
+$('login-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const msg = $('login-msg'); msg.className = ''; msg.textContent = t('sending');
+  const email = $('email').value.trim();
+  const redirect = location.origin + location.pathname;
+  const { error } = await sb.auth.signInWithOtp({ email, options: { emailRedirectTo: redirect } });
+  if (error) { msg.className = 'err'; msg.textContent = error.message; } else { msg.textContent = t('link_sent'); }
+});
+
+// Local preview only: lets a developer render the page with saved sample data.
+// Never active on the live site (github.io), and test_data.js is not published.
+const LOCAL_PREVIEW = location.protocol === 'file:' || ['localhost', '127.0.0.1'].includes(location.hostname);
+if (LOCAL_PREVIEW) {
+  window.__pearlTest = async () => {
+    await new Promise((ok, no) => { const s = document.createElement('script'); s.src = 'test_data.js';
+      s.onload = ok; s.onerror = no; document.head.appendChild(s); });
+    S.test = true; await startApp({ email: 'preview (sample data)' });
+  };
+}
+
+(async function init() {
+  renderChrome();
+  if (location.protocol === 'file:' && !sb) { showLogin(); return; }
+  if (!sb) { $('login').hidden = false; $('login-msg').className = 'err'; $('login-msg').textContent = 'Could not load the sign-in library.'; return; }
+  sb.auth.onAuthStateChange((event, session) => {
+    if (event === 'SIGNED_IN' && session && !S.user) startApp(session.user);
+    if (event === 'SIGNED_OUT') { S.user = null; showLogin(); }
+  });
+  const { data } = await sb.auth.getSession();
+  if (data && data.session) { if (!S.user) startApp(data.session.user); } else if (!S.user) showLogin();
+})();
+</script>
+</body>
+</html>
