@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Never leak the code to other sites -->
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="noindex, nofollow">
+<title>Pearl Clinic — sign-in code</title>
+<style>
+  body { font: 16px/1.5 -apple-system, "Segoe UI", Tahoma, sans-serif; background: #f6f4f2; color: #1a1a1a;
+         margin: 0; display: grid; place-items: center; min-height: 100vh; }
+  .card { background: #fff; border-radius: 14px; padding: 28px 32px; max-width: 560px; width: calc(100% - 32px);
+          box-shadow: 0 4px 24px rgba(0,0,0,.08); }
+  h1 { font-size: 20px; margin: 0 0 8px; color: #8B1538; }
+  p  { margin: 8px 0; color: #444; }
+  code { display: block; word-break: break-all; background: #f3eef0; border: 1px solid #e3d6db; border-radius: 8px;
+         padding: 12px; font-size: 14px; margin: 14px 0; }
+  button { background: #8B1538; color: #fff; border: 0; border-radius: 8px; padding: 10px 18px; font-size: 15px; cursor: pointer; }
+  .err { color: #b00020; }
+  .ar { direction: rtl; text-align: right; color: #555; border-top: 1px solid #eee; margin-top: 18px; padding-top: 12px; }
+</style>
+</head>
+<body>
+<div class="card">
+  <h1>Pearl Clinic data pipeline: sign-in code</h1>
+  <div id="out"></div>
+  <p class="ar">انسخ الرمز والصقه في نافذة البرنامج على جهازك. هذه الصفحة لا ترسل الرمز إلى أي مكان.</p>
+</div>
+<script>
+  // Static page: reads ?code= from the address bar and shows it. No network requests.
+  const q = new URLSearchParams(location.search);
+  const out = document.getElementById('out');
+  const code = q.get('code'), err = q.get('error');
+  if (code) {
+    out.innerHTML = '<p>Copy this code and paste it into the window running <b>snapchat_auth.py</b> on your PC. ' +
+                    'It expires in a few minutes.</p><code id="c"></code><button id="b">Copy code</button>';
+    document.getElementById('c').textContent = code;
+    document.getElementById('b').onclick = () => navigator.clipboard.writeText(code)
+      .then(() => { document.getElementById('b').textContent = 'Copied ✓'; });
+    // Remove the code from the address bar / history once shown
+    history.replaceState(null, '', location.pathname);
+  } else if (err) {
+    out.innerHTML = '<p class="err"></p>';
+    out.querySelector('.err').textContent = 'Sign-in was not completed: ' + err + ' ' + (q.get('error_description') || '');
+  } else {
+    out.innerHTML = '<p>No sign-in code on this page. Start the sign-in from <b>snapchat_auth.py</b> on your PC.</p>';
+  }
+</script>
+</body>
+</html>
