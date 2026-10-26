@@ -118,7 +118,7 @@ footer.pf{text-align:center;color:var(--muted);font-size:12px;padding:10px 0 30p
   .hmeta{align-items:flex-start;text-align:start}
 }
 @media print{
-  nav,.filters,.hbtns,#signout{display:none!important}
+  nav,.filters,.hbtns{display:none!important}
   body{background:#fff} .panel{break-inside:avoid;box-shadow:none}
   header{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 }
@@ -126,21 +126,7 @@ footer.pf{text-align:center;color:var(--muted);font-size:12px;padding:10px 0 30p
 </head>
 <body>
 
-<div id="login" hidden>
-  <div class="login-card">
-    <div class="logo">PC</div>
-    <h1 data-i18n="login_title"></h1>
-    <p data-i18n="login_sub"></p>
-    <form id="login-form">
-      <input type="email" id="email" required autocomplete="email" placeholder="you@example.com">
-      <button class="btn wide" type="submit" data-i18n="send_link"></button>
-    </form>
-    <div id="login-msg"></div>
-    <p><button class="ghost lang-toggle" type="button">العربية</button></p>
-  </div>
-</div>
-
-<div id="app" hidden>
+<div id="app">
   <header>
     <div class="logo">PC</div>
     <div class="htitle">
@@ -153,7 +139,6 @@ footer.pf{text-align:center;color:var(--muted);font-size:12px;padding:10px 0 30p
       <div class="hbtns">
         <button class="hbtn" id="print" type="button">🖨 <span data-i18n="print"></span></button>
         <button class="hbtn lang-toggle" type="button">العربية</button>
-        <button class="hbtn" id="signout" type="button" data-i18n="sign_out"></button>
       </div>
     </div>
   </header>
@@ -199,7 +184,7 @@ const I18N = {
     sub: 'Snapchat + TikTok + Meta performance, from the ad platforms & the FantasyHub CRM',
     login_title: 'Sign in', login_sub: "Enter your email and we'll send you a sign-in link.",
     send_link: 'Send sign-in link', sending: 'Sending…', link_sent: 'Check your inbox and open the sign-in link on this device.',
-    no_access: "This email doesn't have access to the dashboard. Ask the owner to add it.",
+    no_access: 'This dashboard is currently switched off. Ask the owner to turn it back on.',
     sign_out: 'Sign out', print: 'Print', loading: 'Loading…', load_err: 'Could not load data: ',
     data_range: 'Data', generated: 'Generated',
     summary: 'Executive Summary', platforms: 'Platform Comparison', campaigns: 'Campaign & Ad Performance',
@@ -254,7 +239,7 @@ const I18N = {
     sub: 'أداء سناب شات وتيك توك وميتا من منصات الإعلانات ونظام FantasyHub',
     login_title: 'تسجيل الدخول', login_sub: 'أدخل بريدك الإلكتروني وسنرسل لك رابط الدخول.',
     send_link: 'أرسل رابط الدخول', sending: 'جارٍ الإرسال…', link_sent: 'تحقق من بريدك وافتح رابط الدخول على هذا الجهاز.',
-    no_access: 'هذا البريد ليس لديه صلاحية الدخول. اطلب من المسؤول إضافته.',
+    no_access: 'لوحة التحكم متوقفة حالياً. اطلب من المسؤول إعادة تفعيلها.',
     sign_out: 'تسجيل الخروج', print: 'طباعة', loading: 'جارٍ التحميل…', load_err: 'تعذّر تحميل البيانات: ',
     data_range: 'البيانات', generated: 'آخر تحديث',
     summary: 'الملخص التنفيذي', platforms: 'مقارنة المنصات', campaigns: 'أداء الحملات والإعلانات',
@@ -320,7 +305,7 @@ const TABS = ['summary', 'platforms', 'campaigns', 'funnel', 'monthly', 'weekly'
 const PRESETS = ['mtd', 'last_month', 'l7', 'l30', 'l90', 'all_time'];
 
 let sb = null;
-try { sb = window.supabase.createClient(SB_URL, SB_KEY, { auth: { persistSession: true, detectSessionInUrl: true } }); }
+try { sb = window.supabase.createClient(SB_URL, SB_KEY, { auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false } }); }
 catch (e) { console.error('Supabase client failed to load', e); }
 
 // ───────── helpers ─────────
@@ -766,55 +751,42 @@ function showErr(e) {
   $('view').innerHTML = `<div class="state err">${esc(denied ? T('no_access') : T('load_err') + msg)}</div>`;
 }
 
-// ───────── auth + startup ─────────
-function showLogin() { $('app').hidden = true; $('login').hidden = false; renderChrome(); }
-async function startApp(user) {
-  S.user = user; $('login').hidden = true; $('app').hidden = false;
+// ───────── startup (public link — no login; owner decision 2026-10-25) ─────────
+// Data comes from aggregate-only database functions callable with the publishable key.
+// Access can be switched off in the database (core.dashboard_settings.public_access).
+async function startApp() {
   setPreset(S.preset); renderChrome();
   $('view').innerHTML = `<div class="state">${esc(T('loading'))}</div>`;
   try { await loadBase(); setPreset(S.preset); await refresh(); } catch (e) { renderChrome(); showErr(e); }
 }
 document.addEventListener('click', async (ev) => {
   const el = ev.target.closest('button'); if (!el) return;
-  if (el.classList.contains('lang-toggle')) { S.lang = S.lang === 'ar' ? 'en' : 'ar'; store.set('pearl_lang', S.lang); if (!$('app').hidden) await refresh(); else renderChrome(); return; }
+  if (el.classList.contains('lang-toggle')) { S.lang = S.lang === 'ar' ? 'en' : 'ar'; store.set('pearl_lang', S.lang); await refresh(); return; }
   if (el.dataset.tab) { S.tab = el.dataset.tab; store.set('pearl_tab2', S.tab); await refresh(); return; }
   if (el.dataset.preset) { setPreset(el.dataset.preset); await refresh(); return; }
   if (el.dataset.mxMetric) { S.mx.metric = el.dataset.mxMetric; renderMatrix(); return; }
   if (el.dataset.mxMonths !== undefined) { S.mx.months = +el.dataset.mxMonths; renderMatrix(); return; }
   if (el.id === 'reset') { S.platform = 'all'; setPreset('mtd'); await refresh(); return; }
   if (el.id === 'print') { window.print(); return; }
-  if (el.id === 'signout') { if (sb && !S.test) await sb.auth.signOut(); S.user = null; showLogin(); }
 });
 $('platform').addEventListener('change', async (e) => { S.platform = e.target.value; await refresh(); });
 ['d-start', 'd-end'].forEach(id => $(id).addEventListener('change', async () => {
   const a = $('d-start').value, b = $('d-end').value;
   if (a && b && a <= b) { S.start = a; S.end = b; S.preset = 'custom'; await refresh(); }
 }));
-$('login-form').addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const msg = $('login-msg'); msg.className = ''; msg.textContent = T('sending');
-  const { error } = await sb.auth.signInWithOtp({ email: $('email').value.trim(), options: { emailRedirectTo: location.origin + location.pathname } });
-  if (error) { msg.className = 'err'; msg.textContent = error.message; } else { msg.textContent = T('link_sent'); }
-});
-
 // Local preview only: render with saved sample data. Never active on the live site; test_data.js is not published.
 const LOCAL_PREVIEW = location.protocol === 'file:' || ['localhost', '127.0.0.1'].includes(location.hostname);
 if (LOCAL_PREVIEW) {
   window.__pearlTest = async () => {
     await new Promise((ok, no) => { const s = document.createElement('script'); s.src = 'test_data.js'; s.onload = ok; s.onerror = no; document.head.appendChild(s); });
-    S.test = true; await startApp({ email: 'preview (sample data)' });
+    S.test = true; S.rangeKey = null; await startApp();
   };
 }
 
 (async function init() {
   renderChrome();
-  if (!sb) { $('login').hidden = false; $('login-msg').className = 'err'; $('login-msg').textContent = 'Could not load the sign-in library.'; return; }
-  sb.auth.onAuthStateChange((event, session) => {
-    if (event === 'SIGNED_IN' && session && !S.user) startApp(session.user);
-    if (event === 'SIGNED_OUT') { S.user = null; showLogin(); }
-  });
-  const { data } = await sb.auth.getSession();
-  if (data && data.session) { if (!S.user) startApp(data.session.user); } else if (!S.user) showLogin();
+  if (!sb) { $('view').innerHTML = `<div class="state err">${esc(T('load_err'))}Supabase library did not load.</div>`; return; }
+  await startApp();
 })();
 </script>
 </body>
