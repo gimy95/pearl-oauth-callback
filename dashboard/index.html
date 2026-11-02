@@ -188,7 +188,7 @@ const I18N = {
     sign_out: 'Sign out', print: 'Print', loading: 'Loading…', load_err: 'Could not load data: ',
     data_range: 'Data', generated: 'Generated',
     summary: 'Executive Summary', platforms: 'Platform Comparison', campaigns: 'Campaign & Ad Performance',
-    funnel: 'Lead Quality & Funnel', monthly: '📅 Monthly Report', weekly: '📆 Week over Week',
+    funnel: 'Lead Quality & Funnel', monthly: '📅 Monthly Report', weekly: '📆 Week over Week', plan: '🗓️ Nov 2026 Plan',
     date: 'Date', to: 'to', platform: 'Platform', reset: 'Reset', all: 'All',
     mtd: 'This Month', last_month: 'Last Month', l7: 'Last 7d', l30: 'Last 30d', l90: 'Last 90d', all_time: 'All time',
     showing: 'Showing',
@@ -243,7 +243,7 @@ const I18N = {
     sign_out: 'تسجيل الخروج', print: 'طباعة', loading: 'جارٍ التحميل…', load_err: 'تعذّر تحميل البيانات: ',
     data_range: 'البيانات', generated: 'آخر تحديث',
     summary: 'الملخص التنفيذي', platforms: 'مقارنة المنصات', campaigns: 'أداء الحملات والإعلانات',
-    funnel: 'جودة الليدز والمسار', monthly: '📅 التقرير الشهري', weekly: '📆 أسبوعي',
+    funnel: 'جودة الليدز والمسار', monthly: '📅 التقرير الشهري', weekly: '📆 أسبوعي', plan: '🗓️ خطة نوفمبر 2026',
     date: 'التاريخ', to: 'إلى', platform: 'المنصة', reset: 'إعادة ضبط', all: 'الكل',
     mtd: 'هذا الشهر', last_month: 'الشهر الماضي', l7: 'آخر 7 أيام', l30: 'آخر 30 يوماً', l90: 'آخر 90 يوماً', all_time: 'كل الفترة',
     showing: 'الفترة',
@@ -301,7 +301,7 @@ const S = { lang: store.get('pearl_lang') || 'en', tab: store.get('pearl_tab2') 
             info: [], daily: [], firstDay: '2026-01-01', stages: [], ads: [], adsAll: null, settings: {},
             rangeKey: null, user: null, test: false, loadedAt: null,
             mx: { metric: 'pl', months: 6 } };
-const TABS = ['summary', 'platforms', 'campaigns', 'funnel', 'monthly', 'weekly'];
+const TABS = ['summary', 'platforms', 'campaigns', 'funnel', 'monthly', 'weekly', 'plan'];
 const PRESETS = ['mtd', 'last_month', 'l7', 'l30', 'l90', 'all_time'];
 
 let sb = null;
@@ -687,6 +687,9 @@ function renderMatrix() {
     <tbody>${body || '<tr><td>—</td></tr>'}</tbody></table></div><div class="note">${esc(T('best_cell'))} ${esc(T('n_matrix'))} ${esc(T('n_cat'))}</div>`;
 }
 
+function viewPlan() {
+  $('view').innerHTML = '<iframe src="plan.html" title="Nov 2026 Plan" style="width:100%;height:calc(100vh - 160px);min-height:700px;border:0;border-radius:10px;background:#fff"></iframe>';
+}
 function viewWeekly() {
   const today = riyadhToday(); const [, thisMon] = isoWeek(today); const start = addDays(thisMon, -7 * 11);
   const weeks = []; for (let c = start; c <= today; c = addDays(c, 7)) weeks.push(c);
@@ -741,7 +744,7 @@ async function refresh() {
     $('view').innerHTML = `<div class="state">${esc(T('loading'))}</div>`;
     try { await loadRange(); } catch (e) { return showErr(e); }
   }
-  const fn = { summary: viewSummary, platforms: viewPlatforms, campaigns: viewCampaigns, funnel: viewFunnel, monthly: viewMonthly, weekly: viewWeekly }[S.tab] || viewSummary;
+  const fn = { summary: viewSummary, platforms: viewPlatforms, campaigns: viewCampaigns, funnel: viewFunnel, monthly: viewMonthly, weekly: viewWeekly, plan: viewPlan }[S.tab] || viewSummary;
   try { await fn(); } catch (e) { console.error(e); showErr(e); }
 }
 function setPreset(p) { S.preset = p; const r = presetRange(p); if (r[0]) { S.start = r[0]; S.end = r[1]; } }
