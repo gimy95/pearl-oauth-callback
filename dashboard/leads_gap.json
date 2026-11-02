@@ -1,0 +1,105 @@
+{
+ "crm_cutoff": "2026-11-02 14:36:04.533000",
+ "generated": "2026-11-02 19:37:15",
+ "rows": [
+  {
+   "month": "2026-08",
+   "platform": "snapchat",
+   "platform_leads": 104,
+   "unique": 97,
+   "in_crm": 95,
+   "missing": 2,
+   "gap_pct": 2.1,
+   "from": "2026-08-04",
+   "partial_platform": false
+  },
+  {
+   "month": "2026-08",
+   "platform": "tiktok",
+   "platform_leads": 149,
+   "unique": 147,
+   "in_crm": 147,
+   "missing": 0,
+   "gap_pct": 0.0,
+   "from": "2026-08-06",
+   "partial_platform": false
+  },
+  {
+   "month": "2026-09",
+   "platform": "snapchat",
+   "platform_leads": 215,
+   "unique": 201,
+   "in_crm": 197,
+   "missing": 4,
+   "gap_pct": 2.0,
+   "from": null,
+   "partial_platform": false
+  },
+  {
+   "month": "2026-09",
+   "platform": "tiktok",
+   "platform_leads": 227,
+   "unique": 222,
+   "in_crm": 222,
+   "missing": 0,
+   "gap_pct": 0.0,
+   "from": null,
+   "partial_platform": false
+  },
+  {
+   "month": "2026-10",
+   "platform": "meta",
+   "platform_leads": 50,
+   "unique": 50,
+   "in_crm": 50,
+   "missing": 0,
+   "gap_pct": 0.0,
+   "from": "2026-10-25",
+   "partial_platform": true
+  },
+  {
+   "month": "2026-10",
+   "platform": "snapchat",
+   "platform_leads": 114,
+   "unique": 105,
+   "in_crm": 103,
+   "missing": 2,
+   "gap_pct": 1.9,
+   "from": null,
+   "partial_platform": false
+  },
+  {
+   "month": "2026-10",
+   "platform": "tiktok",
+   "platform_leads": 155,
+   "unique": 154,
+   "in_crm": 154,
+   "missing": 0,
+   "gap_pct": 0.0,
+   "from": null,
+   "partial_platform": false
+  },
+  {
+   "month": "2026-11",
+   "platform": "meta",
+   "platform_leads": 4,
+   "unique": 4,
+   "in_crm": 4,
+   "missing": 0,
+   "gap_pct": 0.0,
+   "from": null,
+   "partial_platform": true
+  },
+  {
+   "month": "2026-11",
+   "platform": "snapchat",
+   "platform_leads": 6,
+   "unique": 6,
+   "in_crm": 6,
+   "missing": 0,
+   "gap_pct": 0.0,
+   "from": null,
+   "partial_platform": false
+  }
+ ]
+}

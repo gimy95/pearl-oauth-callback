@@ -210,6 +210,9 @@ const I18N = {
     mom: 'Overall Monthly KPIs — MoM Change', matrix: 'Category × Channel — Month-by-Month', month: 'Month',
     metric: 'Metric', months: 'Months', last3: 'Last 3', last6: 'Last 6', all_m: 'All', all_channels: 'All channels',
     total: 'Total', mom_col: 'MoM', wow: 'Weekly KPIs — WoW Change', iso_week: 'ISO Week', wk_chart: 'Weekly Spend & Leads',
+    gap_title: 'Lead Sync Check: Platform vs CRM', gap_plat_leads: 'Platform leads', gap_unique: 'Unique people', gap_in: 'In CRM', gap_missing: 'Missing from CRM', gap_pct: 'Gap %',
+    gap_note: 'Each platform lead is matched to the CRM by phone number. Gap % = unique people missing from the CRM ÷ unique people. Duplicates are counted once. Leads newer than the last CRM export are left out. Updated monthly from platform exports.',
+    gap_partial: 'partial', gap_meta: 'Meta covers one campaign only (Instagram posts, from 25 Oct).', gap_none: 'No sync-check data yet.', gap_asof: 'CRM export as of',
     in_progress: 'partial', video_views: 'video views', excl: 'excluded from spend',
     fresh_through: 'Data through', crm_import: 'CRM import', no_spend_since: 'no spend since',
     best_cell: 'Green = best channel for that category and month.',
@@ -265,6 +268,9 @@ const I18N = {
     mom: 'مؤشرات شهرية — التغير الشهري', matrix: 'مقارنة الفئات والمنصات شهرياً', month: 'الشهر',
     metric: 'المؤشر', months: 'الأشهر', last3: 'آخر 3', last6: 'آخر 6', all_m: 'الكل', all_channels: 'كل المنصات',
     total: 'الإجمالي', mom_col: 'التغير', wow: 'مؤشرات أسبوعية — التغير الأسبوعي', iso_week: 'الأسبوع', wk_chart: 'الإنفاق والليدات الأسبوعية',
+    gap_title: 'فحص مزامنة الليدز: المنصة مقابل CRM', gap_plat_leads: 'ليدات المنصة', gap_unique: 'عدد الأشخاص', gap_in: 'داخل CRM', gap_missing: 'غير موجودة في CRM', gap_pct: 'نسبة الفجوة',
+    gap_note: 'يتم مطابقة كل ليد من المنصة مع CRM برقم الجوال. نسبة الفجوة = الأشخاص غير الموجودين في CRM ÷ عدد الأشخاص. المكرر يُحسب مرة واحدة. الليدات الأحدث من آخر تصدير للـ CRM مستبعدة. يُحدَّث شهرياً من ملفات المنصات.',
+    gap_partial: 'جزئي', gap_meta: 'ميتا تشمل حملة واحدة فقط (منشورات انستقرام، من 25 أكتوبر).', gap_none: 'لا توجد بيانات فحص بعد.', gap_asof: 'تصدير CRM حتى',
     in_progress: 'جزئي', video_views: 'مشاهدات فيديو', excl: 'مستبعدة من الإنفاق',
     fresh_through: 'البيانات حتى', crm_import: 'آخر استيراد CRM', no_spend_since: 'لا إنفاق منذ',
     best_cell: 'الأخضر = أفضل منصة لتلك الفئة في ذلك الشهر.',
@@ -643,6 +649,7 @@ async function viewMonthly() {
   $('view').innerHTML = `<div class="panel">${H2('mom')}<div class="chart tall"><canvas id="c_m"></canvas></div><div class="tbl" style="margin-top:14px"><table><thead><tr>
       <th>${L('month')}</th><th class="n">${L('spend')}</th><th class="n">${L('platform_leads')}</th><th class="n">${L('crm_leads')}</th><th class="n">${L('cpl')}</th>
       <th class="n">${L('bookings')}</th><th class="n">${L('cpb')}</th><th class="n">${L('booking_rate')}</th></tr></thead><tbody>${body}</tbody></table></div></div>
+    <div class="panel" id="gap-panel">${H2('gap_title')}<div class="state">${esc(T('loading'))}</div></div>
     <div class="panel" id="mx-panel">${H2('matrix')}<div class="state">${esc(T('loading'))}</div></div>`;
   chart('c_m', { data: { labels: months.map(monthLabel), datasets: [
     { type: 'bar', label: T('spend'), _money: true, data: mz.map(z => z.spend), backgroundColor: 'rgba(139,21,56,.8)', yAxisID: 'y' },
@@ -650,8 +657,32 @@ async function viewMonthly() {
     { type: 'line', label: T('platform_leads'), data: mz.map(z => z.pl), borderColor: '#E8457A', backgroundColor: '#E8457A', yAxisID: 'y2', tension: .25 },
     { type: 'line', label: T('bookings'), data: mz.map(z => z.book), borderColor: '#0F8A5F', backgroundColor: '#0F8A5F', yAxisID: 'y2', tension: .25 },
   ] }, options: opts({ y2: true }) });
+  renderGap();
   try { await loadAdsAll(); } catch (e) { $('mx-panel').innerHTML = H2('matrix') + `<div class="state err">${esc(T('load_err') + (e.message || e))}</div>`; return; }
   renderMatrix();
+}
+async function renderGap() {
+  const panel = $('gap-panel'); if (!panel) return;
+  let g = S.gap;
+  if (!g) { try { g = S.gap = await (await fetch('leads_gap.json', { cache: 'no-cache' })).json(); } catch (e) { g = null; } }
+  const rows = ((g && g.rows) || []).filter(r => inPlat(r.platform));
+  if (!rows.length) { panel.innerHTML = H2('gap_title') + `<div class="state">${esc(T('gap_none'))}</div>`; return; }
+  const months = [...new Set(rows.map(r => r.month))].sort().reverse(); const cur = riyadhToday().slice(0, 7);
+  const tag = (r) => (r.from ? ` <span class="tag info">${esc(T('gap_partial'))}</span>` : '');
+  const gp = (m, u) => u ? pct(m / u) : '—';
+  const cls = (v) => v > 0 ? ' style="color:#B3261E;font-weight:600"' : '';
+  let body = '';
+  for (const m of months) {
+    const rs = PLAT_ORDER.map(p => rows.find(r => r.month === m && r.platform === p)).filter(Boolean);
+    const tot = rs.filter(r => !r.partial_platform).reduce((a, r) => (a.pl += r.platform_leads, a.u += r.unique, a.in += r.in_crm, a.m += r.missing, a), { pl: 0, u: 0, in: 0, m: 0 });
+    body += `<tr class="total"><td>${esc(monthLabel(m + '-01'))}${m === cur ? ` <span class="tag info">${esc(T('in_progress'))}</span>` : ''}</td><td>${esc(T('all_channels'))}</td>
+      <td class="n">${num(tot.pl)}</td><td class="n">${num(tot.u)}</td><td class="n">${num(tot.in)}</td><td class="n"${cls(tot.m)}>${num(tot.m)}</td><td class="n"${cls(tot.m)}>${gp(tot.m, tot.u)}</td></tr>`;
+    if (S.platform === 'all') for (const r of rs) body += `<tr class="sub"><td></td><td><span class="dot" style="background:${pcolor(r.platform)}"></span>${esc(pname(r.platform))}${tag(r)}${r.partial_platform ? '*' : ''}</td>
+      <td class="n">${num(r.platform_leads)}</td><td class="n">${num(r.unique)}</td><td class="n">${num(r.in_crm)}</td><td class="n"${cls(r.missing)}>${num(r.missing)}</td><td class="n"${cls(r.missing)}>${gp(r.missing, r.unique)}</td></tr>`;
+  }
+  panel.innerHTML = `${H2('gap_title')}<div class="tbl"><table><thead><tr><th>${L('month')}</th><th>${L('platform')}</th><th class="n">${L('gap_plat_leads')}</th><th class="n">${L('gap_unique')}</th>
+    <th class="n">${L('gap_in')}</th><th class="n">${L('gap_missing')}</th><th class="n">${L('gap_pct')}</th></tr></thead><tbody>${body}</tbody></table></div>
+    <div class="note">${esc(T('gap_note'))} ${rows.some(r => r.partial_platform) ? '* ' + esc(T('gap_meta')) : ''} ${esc(T('gap_asof'))} ${esc(String(g.crm_cutoff).slice(0, 16).replace('T', ' '))}</div>`;
 }
 function renderMatrix() {
   const panel = $('mx-panel'); if (!panel) return;
