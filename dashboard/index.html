@@ -212,6 +212,7 @@ const I18N = {
     total: 'Total', mom_col: 'MoM', wow: 'Weekly KPIs — WoW Change', iso_week: 'ISO Week', wk_chart: 'Weekly Spend & Leads',
     gap_title: 'Lead Sync Check: Platform vs CRM', gap_plat_leads: 'Platform leads', gap_unique: 'Unique people', gap_in: 'In CRM', gap_missing: 'Missing from CRM', gap_pct: 'Gap %',
     gap_note: 'Each platform lead is matched to the CRM by phone number. Gap % = unique people missing from the CRM ÷ unique people. Duplicates are counted once. Leads newer than the last CRM export are left out. Updated monthly from platform exports.',
+    gap_alert: 'Missing in {month}', gap_src: 'Source',
     gap_partial: 'partial', gap_meta: 'Meta covers one campaign only (Instagram posts, from 25 Oct).', gap_none: 'No sync-check data yet.', gap_asof: 'CRM export as of',
     in_progress: 'partial', video_views: 'video views', excl: 'excluded from spend',
     fresh_through: 'Data through', crm_import: 'CRM import', no_spend_since: 'no spend since',
@@ -270,6 +271,7 @@ const I18N = {
     total: 'الإجمالي', mom_col: 'التغير', wow: 'مؤشرات أسبوعية — التغير الأسبوعي', iso_week: 'الأسبوع', wk_chart: 'الإنفاق والليدات الأسبوعية',
     gap_title: 'فحص مزامنة الليدز: المنصة مقابل CRM', gap_plat_leads: 'ليدات المنصة', gap_unique: 'عدد الأشخاص', gap_in: 'داخل CRM', gap_missing: 'غير موجودة في CRM', gap_pct: 'نسبة الفجوة',
     gap_note: 'يتم مطابقة كل ليد من المنصة مع CRM برقم الجوال. نسبة الفجوة = الأشخاص غير الموجودين في CRM ÷ عدد الأشخاص. المكرر يُحسب مرة واحدة. الليدات الأحدث من آخر تصدير للـ CRM مستبعدة. يُحدَّث شهرياً من ملفات المنصات.',
+    gap_alert: 'غير موجودة في {month}', gap_src: 'المصدر',
     gap_partial: 'جزئي', gap_meta: 'ميتا تشمل حملة واحدة فقط (منشورات انستقرام، من 25 أكتوبر).', gap_none: 'لا توجد بيانات فحص بعد.', gap_asof: 'تصدير CRM حتى',
     in_progress: 'جزئي', video_views: 'مشاهدات فيديو', excl: 'مستبعدة من الإنفاق',
     fresh_through: 'البيانات حتى', crm_import: 'آخر استيراد CRM', no_spend_since: 'لا إنفاق منذ',
@@ -675,12 +677,16 @@ async function renderGap() {
   for (const m of months) {
     const rs = PLAT_ORDER.map(p => rows.find(r => r.month === m && r.platform === p)).filter(Boolean);
     const tot = rs.filter(r => !r.partial_platform).reduce((a, r) => (a.pl += r.platform_leads, a.u += r.unique, a.in += r.in_crm, a.m += r.missing, a), { pl: 0, u: 0, in: 0, m: 0 });
-    body += `<tr class="total"><td>${esc(monthLabel(m + '-01'))}${m === cur ? ` <span class="tag info">${esc(T('in_progress'))}</span>` : ''}</td><td>${esc(T('all_channels'))}</td>
+    const hot = m === months[0] && tot.m > 0 ? ' style="background:rgba(179,38,30,.10)"' : '';
+    body += `<tr class="total"${hot}><td>${esc(monthLabel(m + '-01'))}${m === cur ? ` <span class="tag info">${esc(T('in_progress'))}</span>` : ''}</td><td>${esc(T('all_channels'))}</td>
       <td class="n">${num(tot.pl)}</td><td class="n">${num(tot.u)}</td><td class="n">${num(tot.in)}</td><td class="n"${cls(tot.m)}>${num(tot.m)}</td><td class="n"${cls(tot.m)}>${gp(tot.m, tot.u)}</td></tr>`;
-    if (S.platform === 'all') for (const r of rs) body += `<tr class="sub"><td></td><td><span class="dot" style="background:${pcolor(r.platform)}"></span>${esc(pname(r.platform))}${tag(r)}${r.partial_platform ? '*' : ''}</td>
+    if (S.platform === 'all') for (const r of rs) body += `<tr class="sub"${m === months[0] && r.missing > 0 ? ' style="background:rgba(179,38,30,.10)"' : ''}><td></td><td><span class="dot" style="background:${pcolor(r.platform)}"></span>${esc(pname(r.platform))}${tag(r)}${r.partial_platform ? '*' : ''}</td>
       <td class="n">${num(r.platform_leads)}</td><td class="n">${num(r.unique)}</td><td class="n">${num(r.in_crm)}</td><td class="n"${cls(r.missing)}>${num(r.missing)}</td><td class="n"${cls(r.missing)}>${gp(r.missing, r.unique)}</td></tr>`;
   }
-  panel.innerHTML = `${H2('gap_title')}<div class="tbl"><table><thead><tr><th>${L('month')}</th><th>${L('platform')}</th><th class="n">${L('gap_plat_leads')}</th><th class="n">${L('gap_unique')}</th>
+  const hotRows = rows.filter(r => r.month === months[0] && r.missing > 0);
+  const alert = hotRows.length ? `<div class="note" style="background:rgba(179,38,30,.10);border-inline-start:4px solid #B3261E;padding:10px 12px;margin-bottom:12px;color:inherit"><b>${esc(fill(T('gap_alert'), { month: monthLabel(months[0] + '-01') }))}</b>`
+    + hotRows.map(r => `<div><span class="dot" style="background:${pcolor(r.platform)}"></span><b>${esc(pname(r.platform))}</b>: ${num(r.missing)} — ${esc(T('gap_src'))}: ${Object.entries(r.missing_campaigns || {}).map(([k, v]) => esc(k) + ' (' + v + ')').join('، ')}</div>`).join('') + '</div>' : '';
+  panel.innerHTML = `${H2('gap_title')}${alert}<div class="tbl"><table><thead><tr><th>${L('month')}</th><th>${L('platform')}</th><th class="n">${L('gap_plat_leads')}</th><th class="n">${L('gap_unique')}</th>
     <th class="n">${L('gap_in')}</th><th class="n">${L('gap_missing')}</th><th class="n">${L('gap_pct')}</th></tr></thead><tbody>${body}</tbody></table></div>
     <div class="note">${esc(T('gap_note'))} ${rows.some(r => r.partial_platform) ? '* ' + esc(T('gap_meta')) : ''} ${esc(T('gap_asof'))} ${esc(String(g.crm_cutoff).slice(0, 16).replace('T', ' '))}</div>`;
 }

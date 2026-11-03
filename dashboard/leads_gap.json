@@ -1,6 +1,6 @@
 {
  "crm_cutoff": "2026-11-03 13:12:29.867000",
- "generated": "2026-11-03 13:41:45",
+ "generated": "2026-11-03 13:44:11",
  "rows": [
   {
    "month": "2026-08",
@@ -11,6 +11,9 @@
    "missing": 2,
    "gap_pct": 2.1,
    "from": "2026-08-05",
+   "missing_campaigns": {
+    "b0a6f5fc-9cfe-4fd0-9c9e-f5f35314569d": 2
+   },
    "partial_platform": false
   },
   {
@@ -22,6 +25,7 @@
    "missing": 0,
    "gap_pct": 0.0,
    "from": "2026-08-06",
+   "missing_campaigns": {},
    "partial_platform": false
   },
   {
@@ -33,6 +37,9 @@
    "missing": 4,
    "gap_pct": 2.0,
    "from": null,
+   "missing_campaigns": {
+    "b0a6f5fc-9cfe-4fd0-9c9e-f5f35314569d": 4
+   },
    "partial_platform": false
   },
   {
@@ -44,6 +51,7 @@
    "missing": 0,
    "gap_pct": 0.0,
    "from": null,
+   "missing_campaigns": {},
    "partial_platform": false
   },
   {
@@ -55,6 +63,7 @@
    "missing": 0,
    "gap_pct": 0.0,
    "from": "2026-10-25",
+   "missing_campaigns": {},
    "partial_platform": true
   },
   {
@@ -66,6 +75,9 @@
    "missing": 2,
    "gap_pct": 1.9,
    "from": null,
+   "missing_campaigns": {
+    "b0a6f5fc-9cfe-4fd0-9c9e-f5f35314569d": 2
+   },
    "partial_platform": false
   },
   {
@@ -77,6 +89,7 @@
    "missing": 0,
    "gap_pct": 0.0,
    "from": null,
+   "missing_campaigns": {},
    "partial_platform": false
   },
   {
@@ -88,6 +101,9 @@
    "missing": 1,
    "gap_pct": 7.7,
    "from": null,
+   "missing_campaigns": {
+    "Instagram-LeadGeneration-SA-RUH-Female-IG-Posts-20261024": 1
+   },
    "partial_platform": true
   },
   {
@@ -99,6 +115,7 @@
    "missing": 0,
    "gap_pct": 0.0,
    "from": null,
+   "missing_campaigns": {},
    "partial_platform": false
   },
   {
@@ -110,6 +127,9 @@
    "missing": 3,
    "gap_pct": 33.3,
    "from": null,
+   "missing_campaigns": {
+    "Tiktok-Lead-Generation-SA-RUH-Male-All-Offers-20260624": 3
+   },
    "partial_platform": false
   }
  ]
