@@ -1,16 +1,16 @@
 {
- "crm_cutoff": "2026-11-02 14:36:04.533000",
- "generated": "2026-11-02 19:37:15",
+ "crm_cutoff": "2026-11-03 13:12:29.867000",
+ "generated": "2026-11-03 13:41:45",
  "rows": [
   {
    "month": "2026-08",
    "platform": "snapchat",
-   "platform_leads": 104,
-   "unique": 97,
-   "in_crm": 95,
+   "platform_leads": 101,
+   "unique": 95,
+   "in_crm": 93,
    "missing": 2,
    "gap_pct": 2.1,
-   "from": "2026-08-04",
+   "from": "2026-08-05",
    "partial_platform": false
   },
   {
@@ -82,22 +82,33 @@
   {
    "month": "2026-11",
    "platform": "meta",
-   "platform_leads": 4,
-   "unique": 4,
-   "in_crm": 4,
-   "missing": 0,
-   "gap_pct": 0.0,
+   "platform_leads": 13,
+   "unique": 13,
+   "in_crm": 12,
+   "missing": 1,
+   "gap_pct": 7.7,
    "from": null,
    "partial_platform": true
   },
   {
    "month": "2026-11",
    "platform": "snapchat",
-   "platform_leads": 6,
-   "unique": 6,
-   "in_crm": 6,
+   "platform_leads": 11,
+   "unique": 11,
+   "in_crm": 11,
    "missing": 0,
    "gap_pct": 0.0,
+   "from": null,
+   "partial_platform": false
+  },
+  {
+   "month": "2026-11",
+   "platform": "tiktok",
+   "platform_leads": 9,
+   "unique": 9,
+   "in_crm": 6,
+   "missing": 3,
+   "gap_pct": 33.3,
    "from": null,
    "partial_platform": false
   }
