@@ -1,16 +1,16 @@
 {
- "crm_cutoff": "2026-11-03 13:12:29.867000",
- "generated": "2026-11-03 13:44:11",
+ "crm_cutoff": "2026-11-04 10:08:59.296000",
+ "generated": "2026-11-04 10:33:15",
  "rows": [
   {
    "month": "2026-08",
    "platform": "snapchat",
-   "platform_leads": 101,
-   "unique": 95,
-   "in_crm": 93,
+   "platform_leads": 97,
+   "unique": 92,
+   "in_crm": 90,
    "missing": 2,
-   "gap_pct": 2.1,
-   "from": "2026-08-05",
+   "gap_pct": 2.2,
+   "from": "2026-08-06",
    "missing_campaigns": {
     "b0a6f5fc-9cfe-4fd0-9c9e-f5f35314569d": 2
    },
@@ -71,12 +71,12 @@
    "platform": "snapchat",
    "platform_leads": 114,
    "unique": 105,
-   "in_crm": 103,
-   "missing": 2,
-   "gap_pct": 1.9,
+   "in_crm": 104,
+   "missing": 1,
+   "gap_pct": 1.0,
    "from": null,
    "missing_campaigns": {
-    "b0a6f5fc-9cfe-4fd0-9c9e-f5f35314569d": 2
+    "b0a6f5fc-9cfe-4fd0-9c9e-f5f35314569d": 1
    },
    "partial_platform": false
   },
@@ -95,40 +95,43 @@
   {
    "month": "2026-11",
    "platform": "meta",
-   "platform_leads": 13,
-   "unique": 13,
+   "platform_leads": 16,
+   "unique": 16,
    "in_crm": 12,
-   "missing": 1,
-   "gap_pct": 7.7,
+   "missing": 4,
+   "gap_pct": 25.0,
    "from": null,
    "missing_campaigns": {
-    "Instagram-LeadGeneration-SA-RUH-Female-IG-Posts-20261024": 1
+    "Instagram-LeadGeneration-SA-RUH-Female-IG-Posts-20261024": 4
    },
    "partial_platform": true
   },
   {
    "month": "2026-11",
    "platform": "snapchat",
-   "platform_leads": 11,
-   "unique": 11,
-   "in_crm": 11,
-   "missing": 0,
-   "gap_pct": 0.0,
+   "platform_leads": 16,
+   "unique": 16,
+   "in_crm": 14,
+   "missing": 2,
+   "gap_pct": 12.5,
    "from": null,
-   "missing_campaigns": {},
+   "missing_campaigns": {
+    "b0a6f5fc-9cfe-4fd0-9c9e-f5f35314569d": 2
+   },
    "partial_platform": false
   },
   {
    "month": "2026-11",
    "platform": "tiktok",
-   "platform_leads": 9,
-   "unique": 9,
-   "in_crm": 6,
-   "missing": 3,
-   "gap_pct": 33.3,
+   "platform_leads": 21,
+   "unique": 21,
+   "in_crm": 11,
+   "missing": 10,
+   "gap_pct": 47.6,
    "from": null,
    "missing_campaigns": {
-    "Tiktok-Lead-Generation-SA-RUH-Male-All-Offers-20260624": 3
+    "Tiktok-Lead-Generation-SA-RUH-Male-All-Offers-20260624": 8,
+    "Tiktok-Lead-Generation-SA-RUH-Female-All-Offers-20260624": 2
    },
    "partial_platform": false
   }
