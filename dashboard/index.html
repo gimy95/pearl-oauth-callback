@@ -227,7 +227,7 @@ const I18N = {
     n_kpi: 'Booking rate = CRM bookings ÷ CRM leads (same as the WhatsApp report). Platform leads are the lead-form submissions each platform reports; the CRM keeps one record per person, so it is usually lower. Spend, impressions and clicks exclude video-view (awareness) campaigns.',
     n_status: 'Contacted = Inquired + WhatsApp sent + Other. Not qualified = Wrong number + Location too far + Not interested. Booked+ = every lead that booked, including no-shows.',
     n_cat: 'Category, audience and offer are read from campaign / ad-set / ad names — directional, not a tracked field. Bookings are actual when at least 85% of that platform-month\'s CRM leads are tied to their ad (Snapchat: the lead records its exact ad; TikTok and Meta: leads matched by phone to the lead-form exports); otherwise they are estimated (≈) = platform leads × that platform\'s booking rate.',
-    n_camp: 'Actual bookings: Snapchat CRM leads carry the exact ad they came from (since 20 Jun 2026). TikTok (from 12 Aug 2026) and Meta (from 31 Oct 2026) leads are matched by phone to the lead-form exports. Months where fewer than 85% of CRM leads could be tied to an ad stay estimated (≈).',
+    n_camp: 'Actual bookings: Snapchat CRM leads carry the exact ad they came from (since 20 Jun 2026). TikTok (from 12 Aug 2026) and Meta (from 31 Oct 2026) leads are matched by phone to the lead-form exports. Months where fewer than 85% of CRM leads could be tied to an ad stay estimated (≈). TikTok lead forms identify the ad group and campaign but not the individual ad, so TikTok bookings are actual at campaign / ad-set level and estimated (≈) at ad level.',
     n_trend: 'Always shows the last 6 calendar months, independent of the date filter (still respects the platform filter).',
     n_matrix: 'The latest month is partial. Bookings are actual where at least 85% of the month\'s CRM leads are tied to an ad, otherwise estimated.',
     n_rules: [
@@ -286,7 +286,7 @@ const I18N = {
     n_kpi: 'معدل الحجز = حجوزات CRM ÷ ليدات CRM (مثل تقرير الواتساب). ليدات المنصة هي النماذج التي تسجلها كل منصة، وCRM يحفظ سجلاً واحداً لكل شخص لذلك يكون عادة أقل. الإنفاق والظهور والنقرات لا تشمل حملات مشاهدات الفيديو.',
     n_status: 'تم التواصل = استفسار + واتساب + أخرى. غير مؤهل = رقم خاطئ + موقع بعيد + غير مهتم. حجز فأعلى = كل من حجز بما فيهم من لم يحضر.',
     n_cat: 'الفئة والجمهور والعرض مستنتجة من أسماء الحملات والإعلانات — تقريبية. الحجوزات فعلية عندما يرتبط 85% على الأقل من ليدات CRM لتلك المنصة والشهر بإعلانها (سناب: الليد يحمل إعلانه؛ تيك توك وميتا: مطابقة برقم الجوال مع ملفات النماذج)، وإلا فهي تقديرية (≈) = ليدات المنصة × معدل حجز المنصة.',
-    n_camp: 'الحجوزات الفعلية: ليدات سناب في CRM تحمل اسم الإعلان (منذ 20 يونيو 2026). وليدات تيك توك (من 12 أغسطس 2026) وميتا (من 31 أكتوبر 2026) تُطابق برقم الجوال مع ملفات النماذج. الأشهر التي يقل فيها الربط عن 85% تبقى تقديرية (≈).',
+    n_camp: 'الحجوزات الفعلية: ليدات سناب في CRM تحمل اسم الإعلان (منذ 20 يونيو 2026). وليدات تيك توك (من 12 أغسطس 2026) وميتا (من 31 أكتوبر 2026) تُطابق برقم الجوال مع ملفات النماذج. الأشهر التي يقل فيها الربط عن 85% تبقى تقديرية (≈). نماذج تيك توك تحدد المجموعة الإعلانية والحملة دون الإعلان نفسه، لذا حجوزات تيك توك فعلية على مستوى الحملة والمجموعة وتقديرية (≈) على مستوى الإعلان.',
     n_trend: 'يعرض دائماً آخر 6 أشهر بغض النظر عن فلتر التاريخ (مع احترام فلتر المنصة).',
     n_matrix: 'الشهر الأخير جزئي. الحجوزات فعلية حيث يرتبط 85% على الأقل من ليدات CRM للشهر بإعلان، وإلا فهي تقديرية.',
     n_rules: [
@@ -429,16 +429,21 @@ function coverage(adRows, start, end) {
   for (const d of S.daily) if (d.day >= start && d.day <= end) { const k = d.platform + '|' + d.day.slice(0, 7); tot[k] = (tot[k] || 0) + (+d.leads || 0); }
   return (k) => tot[k] > 0 ? (att[k] || 0) / tot[k] : 0;
 }
-function adsAgg(rows, keyFn, metaFn) {   // group ad rows; estimates use platform booking rate
+// TikTok lead forms carry ad ids that are not in TikTok's reporting API, so TikTok leads are tied to an ad GROUP and
+// campaign only (ad = AD_UNKNOWN). At ad level TikTok bookings therefore stay estimated and those rows are hidden.
+const AD_UNKNOWN = '(ad not identifiable)';
+const AD_LEVEL_ACT = new Set(['snapchat', 'meta']);
+function adsAgg(rows, keyFn, metaFn, adLevel) {   // group ad rows; estimates use platform booking rate
   const rate = platRates(); const m = new Map(); const cov = coverage(S.ads, S.start, S.end);
   for (const r of rows) {
+    if (adLevel && r.ad_name === AD_UNKNOWN) continue;
     const k = keyFn(r); let g = m.get(k);
     if (!g) { g = { key: k, spend: 0, imp: 0, clk: 0, pl: 0, crmL: 0, crmB: 0, hasAct: false, est: 0, allAct: true, plats: new Set(), vv: false, n: 0 }; if (metaFn) Object.assign(g, metaFn(r)); m.set(k, g); }
     if (!r.is_video_views) { g.spend += +r.spend_sar || 0; g.imp += +r.impressions || 0; g.clk += +r.clicks || 0; }
     else g.vv = true;
     const pl = +r.platform_leads || 0; g.pl += pl; g.plats.add(r.platform); g.n += 1;
     if (r.crm_leads != null) { g.hasAct = true; g.crmL += +r.crm_leads || 0; g.crmB += +r.crm_bookings || 0; }
-    if (cov(r.platform + '|' + r.month.slice(0, 7)) >= COVER_MIN) g.est += +r.crm_bookings || 0;   // well covered: actual
+    if (cov(r.platform + '|' + r.month.slice(0, 7)) >= COVER_MIN && (!adLevel || AD_LEVEL_ACT.has(r.platform))) g.est += +r.crm_bookings || 0;   // well covered: actual
     else { g.allAct = false; if (rate[r.platform] != null) g.est += pl * rate[r.platform]; }
   }
   for (const g of m.values()) {
@@ -526,7 +531,7 @@ function viewSummary() {
   const g = stageGroups(S.stages.filter(s => inPlat(s.platform)));
   const tk = takeaways(z);
   const ads = adsInPlat(S.ads).filter(r => !r.is_video_views);
-  const creatives = adsAgg(ads, r => r.platform + '|' + r.ad_name, r => ({ platform: r.platform, name: r.ad_name, cat: r.category }))
+  const creatives = adsAgg(ads, r => r.platform + '|' + r.ad_name, r => ({ platform: r.platform, name: r.ad_name, cat: r.category }), true)
     .filter(c => c.pl > 0).sort((a, b) => b.pl - a.pl).slice(0, 8);
   const cats = adsAgg(adsInPlat(S.ads), r => r.category, r => ({ cat: r.category })).sort((a, b) => b.spend - a.spend);
   $('view').innerHTML = `
@@ -619,7 +624,7 @@ function viewCampaigns() {
   const ads = adsInPlat(S.ads);
   const camps = adsAgg(ads, r => r.platform + '|' + r.campaign_name, r => ({ name: r.campaign_name, category: r.category })).sort((a, b) => b.spend - a.spend);
   const sets = adsAgg(ads, r => r.platform + '|' + r.adgroup_name, r => ({ name: r.adgroup_name, category: r.category, gender: r.gender })).sort((a, b) => b.spend - a.spend);
-  const adl = adsAgg(ads, r => r.platform + '|' + r.adgroup_name + '|' + r.ad_name, r => ({ name: r.ad_name, category: r.category, gender: r.gender, offer: r.offer_sar ? r.offer_sar + ' ' + SAR() : '' }))
+  const adl = adsAgg(ads, r => r.platform + '|' + r.adgroup_name + '|' + r.ad_name, r => ({ name: r.ad_name, category: r.category, gender: r.gender, offer: r.offer_sar ? r.offer_sar + ' ' + SAR() : '' }), true)
     .sort((a, b) => b.spend - a.spend).slice(0, 60);
   $('view').innerHTML = `<div class="panel">${H2('campaign_lvl')}${aggTable(camps, 'campaign', g => g.name)}<div class="note">${esc(T('n_camp'))}</div></div>
     <div class="panel">${H2('adset_lvl')}${aggTable(sets, 'adset', g => g.name, ['category', 'gender'])}</div>
