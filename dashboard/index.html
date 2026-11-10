@@ -226,10 +226,10 @@ const I18N = {
     tk_followup: '{n} leads ({s}) are still New or No answer — follow-up may be behind.',
     n_kpi: 'Booking rate = CRM bookings ÷ CRM leads (same as the WhatsApp report). Platform leads are the lead-form submissions each platform reports; the CRM keeps one record per person, so it is usually lower. Spend, impressions and clicks exclude video-view (awareness) campaigns.',
     n_status: 'Contacted = Inquired + WhatsApp sent + Other. Not qualified = Wrong number + Location too far + Not interested. Booked+ = every lead that booked, including no-shows.',
-    n_cat: 'Category, audience and offer are read from campaign / ad-set / ad names — directional, not a tracked field. Actual bookings are shown where the CRM lead is tied to its ad: Snapchat (the lead records its exact ad) and Meta (leads matched by phone to the lead-form exports). TikTok leads are not tied to an ad yet, so Est. bookings = platform leads × that platform\'s booking rate.',
-    n_camp: 'Actual bookings: Snapchat CRM leads carry the exact ad they came from (since 20 Jun 2026). Meta leads are matched by phone to the lead-form exports (from 31 Oct 2026), so counts can be lower than the CRM total. TikTok bookings are estimated from the platform booking rate (≈).',
+    n_cat: 'Category, audience and offer are read from campaign / ad-set / ad names — directional, not a tracked field. Bookings are actual when at least 85% of that platform-month\'s CRM leads are tied to their ad (Snapchat: the lead records its exact ad; TikTok and Meta: leads matched by phone to the lead-form exports); otherwise they are estimated (≈) = platform leads × that platform\'s booking rate.',
+    n_camp: 'Actual bookings: Snapchat CRM leads carry the exact ad they came from (since 20 Jun 2026). TikTok (from 12 Aug 2026) and Meta (from 31 Oct 2026) leads are matched by phone to the lead-form exports. Months where fewer than 85% of CRM leads could be tied to an ad stay estimated (≈).',
     n_trend: 'Always shows the last 6 calendar months, independent of the date filter (still respects the platform filter).',
-    n_matrix: 'The latest month is partial. Bookings here are estimated (≈) except Snapchat, which are actual.',
+    n_matrix: 'The latest month is partial. Bookings are actual where at least 85% of the month\'s CRM leads are tied to an ad, otherwise estimated.',
     n_rules: [
       'Spend excludes video-view campaigns. Snapchat is billed in USD and converted at 3.75 SAR.',
       'Leads are counted by the date they were created in the CRM; recent bookings will still rise as the call centre works the leads.',
@@ -285,10 +285,10 @@ const I18N = {
     tk_followup: '{n} ليد ({s}) ما زالت جديدة أو لم يتم الرد — قد تكون المتابعة متأخرة.',
     n_kpi: 'معدل الحجز = حجوزات CRM ÷ ليدات CRM (مثل تقرير الواتساب). ليدات المنصة هي النماذج التي تسجلها كل منصة، وCRM يحفظ سجلاً واحداً لكل شخص لذلك يكون عادة أقل. الإنفاق والظهور والنقرات لا تشمل حملات مشاهدات الفيديو.',
     n_status: 'تم التواصل = استفسار + واتساب + أخرى. غير مؤهل = رقم خاطئ + موقع بعيد + غير مهتم. حجز فأعلى = كل من حجز بما فيهم من لم يحضر.',
-    n_cat: 'الفئة والجمهور والعرض مستنتجة من أسماء الحملات والإعلانات — تقريبية. الحجوزات الفعلية متاحة حيث يرتبط الليد بإعلانه: سناب شات (الليد يحمل إعلانه) وميتا (مطابقة برقم الجوال مع ملفات النماذج). ليدات تيك توك غير مرتبطة بإعلان بعد، لذلك الحجوزات المتوقعة = ليدات المنصة × معدل حجز المنصة.',
-    n_camp: 'الحجوزات الفعلية: ليدات سناب في CRM تحمل اسم الإعلان (منذ 20 يونيو 2026). وليدات ميتا تُطابق برقم الجوال مع ملفات النماذج (من 31 أكتوبر 2026) وقد تقل عن إجمالي CRM. حجوزات تيك توك تقديرية (≈).',
+    n_cat: 'الفئة والجمهور والعرض مستنتجة من أسماء الحملات والإعلانات — تقريبية. الحجوزات فعلية عندما يرتبط 85% على الأقل من ليدات CRM لتلك المنصة والشهر بإعلانها (سناب: الليد يحمل إعلانه؛ تيك توك وميتا: مطابقة برقم الجوال مع ملفات النماذج)، وإلا فهي تقديرية (≈) = ليدات المنصة × معدل حجز المنصة.',
+    n_camp: 'الحجوزات الفعلية: ليدات سناب في CRM تحمل اسم الإعلان (منذ 20 يونيو 2026). وليدات تيك توك (من 12 أغسطس 2026) وميتا (من 31 أكتوبر 2026) تُطابق برقم الجوال مع ملفات النماذج. الأشهر التي يقل فيها الربط عن 85% تبقى تقديرية (≈).',
     n_trend: 'يعرض دائماً آخر 6 أشهر بغض النظر عن فلتر التاريخ (مع احترام فلتر المنصة).',
-    n_matrix: 'الشهر الأخير جزئي. الحجوزات هنا تقديرية (≈) ما عدا سناب شات فهي فعلية.',
+    n_matrix: 'الشهر الأخير جزئي. الحجوزات فعلية حيث يرتبط 85% على الأقل من ليدات CRM للشهر بإعلان، وإلا فهي تقديرية.',
     n_rules: [
       'الإنفاق لا يشمل حملات مشاهدات الفيديو. سناب شات بالدولار ويُحوّل بسعر 3.75 ريال.',
       'تُحسب الليدات بتاريخ إنشائها في CRM، وستزيد حجوزات الفترات الأخيرة مع متابعة الكول سنتر.',
@@ -420,22 +420,31 @@ function platRates() {   // CRM bookings per platform lead, by platform, for the
   const out = {}; for (const p of PLAT_ORDER) { const z = sumRows(rowsIn(S.start, S.end, false).filter(r => r.platform === p)); out[p] = z.pl ? z.book / z.pl : null; }
   return out;
 }
+// Share of each platform-month's CRM leads that are tied to an ad (Snapchat source / phone match to lead exports).
+// Where it is high enough, ad-level bookings are treated as actual; otherwise they are estimated.
+const COVER_MIN = 0.85;
+function coverage(adRows, start, end) {
+  const att = {}, tot = {};
+  for (const r of adRows) if (r.crm_leads != null) { const k = r.platform + '|' + r.month.slice(0, 7); att[k] = (att[k] || 0) + (+r.crm_leads || 0); }
+  for (const d of S.daily) if (d.day >= start && d.day <= end) { const k = d.platform + '|' + d.day.slice(0, 7); tot[k] = (tot[k] || 0) + (+d.leads || 0); }
+  return (k) => tot[k] > 0 ? (att[k] || 0) / tot[k] : 0;
+}
 function adsAgg(rows, keyFn, metaFn) {   // group ad rows; estimates use platform booking rate
-  const rate = platRates(); const m = new Map();
+  const rate = platRates(); const m = new Map(); const cov = coverage(S.ads, S.start, S.end);
   for (const r of rows) {
     const k = keyFn(r); let g = m.get(k);
-    if (!g) { g = { key: k, spend: 0, imp: 0, clk: 0, pl: 0, crmL: 0, crmB: 0, hasAct: false, est: 0, plats: new Set(), vv: false, n: 0 }; if (metaFn) Object.assign(g, metaFn(r)); m.set(k, g); }
+    if (!g) { g = { key: k, spend: 0, imp: 0, clk: 0, pl: 0, crmL: 0, crmB: 0, hasAct: false, est: 0, allAct: true, plats: new Set(), vv: false, n: 0 }; if (metaFn) Object.assign(g, metaFn(r)); m.set(k, g); }
     if (!r.is_video_views) { g.spend += +r.spend_sar || 0; g.imp += +r.impressions || 0; g.clk += +r.clicks || 0; }
     else g.vv = true;
     const pl = +r.platform_leads || 0; g.pl += pl; g.plats.add(r.platform); g.n += 1;
     if (r.crm_leads != null) { g.hasAct = true; g.crmL += +r.crm_leads || 0; g.crmB += +r.crm_bookings || 0; }
-    if (r.platform === 'snapchat' && r.crm_bookings != null) g.est += +r.crm_bookings || 0;   // snapchat: actual
-    else if (rate[r.platform] != null) g.est += pl * rate[r.platform];
+    if (cov(r.platform + '|' + r.month.slice(0, 7)) >= COVER_MIN) g.est += +r.crm_bookings || 0;   // well covered: actual
+    else { g.allAct = false; if (rate[r.platform] != null) g.est += pl * rate[r.platform]; }
   }
   for (const g of m.values()) {
     g.cpl = g.pl ? g.spend / g.pl : null; g.ctr = g.imp ? g.clk / g.imp : null;
-    g.onlySnap = g.plats.size === 1 && g.plats.has('snapchat');
-    const b = g.onlySnap ? g.crmB : g.est; g.cpb = b ? g.spend / b : null; g.br = g.pl ? b / g.pl : null;
+    g.onlySnap = g.allAct;   // (name kept) = every row's bookings are actual, not estimated
+    const b = g.est; g.cpb = b ? g.spend / b : null; g.br = g.pl ? b / g.pl : null;
   }
   return [...m.values()];
 }
@@ -700,8 +709,9 @@ function renderMatrix() {
   const months = S.mx.months === 0 ? allMonths : allMonths.slice(-S.mx.months);
   const rows = S.adsAll.filter(r => inPlat(r.platform) && months.includes(r.month.slice(0, 7)) && !r.is_video_views);
   const rateAll = {}; for (const p of PLAT_ORDER) { const z = sumRows(S.daily.filter(r => r.platform === p)); rateAll[p] = z.pl ? z.book / z.pl : null; }
+  const covAll = coverage(S.adsAll, S.firstDay, today);
   const cell = (rs) => { let sp = 0, pl = 0, b = 0; for (const r of rs) { sp += +r.spend_sar || 0; const l = +r.platform_leads || 0; pl += l;
-      b += r.platform === 'snapchat' && r.crm_bookings != null ? (+r.crm_bookings || 0) : (rateAll[r.platform] != null ? l * rateAll[r.platform] : 0); }
+      b += covAll(r.platform + '|' + r.month.slice(0, 7)) >= COVER_MIN ? (+r.crm_bookings || 0) : (rateAll[r.platform] != null ? l * rateAll[r.platform] : 0); }
     return { sp, pl, b, cpl: pl ? sp / pl : null, cpb: b ? sp / b : null }; };
   const metric = S.mx.metric; const lowerBetter = metric === 'cpl' || metric === 'cpb';
   const fmt = (c) => !c ? '—' : metric === 'sp' ? money(c.sp, 0) : metric === 'pl' ? (c.pl ? num(c.pl) : '—') : metric === 'b' ? (c.b ? num1(c.b) : '—') : metric === 'cpl' ? money(c.cpl, 0) : money(c.cpb, 0);
