@@ -1,6 +1,6 @@
 {
- "crm_cutoff": "2026-11-05 12:28:08.427000",
- "generated": "2026-11-05 13:20:17",
+ "crm_cutoff": "2026-11-10 14:25:08.108000",
+ "generated": "2026-11-10 13:52:34",
  "rows": [
   {
    "month": "2026-08",
@@ -38,7 +38,7 @@
    "gap_pct": 2.0,
    "from": null,
    "missing_campaigns": {
-    "b0a6f5fc-9cfe-4fd0-9c9e-f5f35314569d": 4
+    "Snapchat-Lead-Generation-SA-RUH-All-Laser-Offer-20260620": 4
    },
    "partial_platform": false
   },
@@ -76,7 +76,7 @@
    "gap_pct": 1.0,
    "from": null,
    "missing_campaigns": {
-    "b0a6f5fc-9cfe-4fd0-9c9e-f5f35314569d": 1
+    "Snapchat-Lead-Generation-SA-RUH-All-Laser-Offer-20260620": 1
    },
    "partial_platform": false
   },
@@ -95,11 +95,11 @@
   {
    "month": "2026-11",
    "platform": "meta",
-   "platform_leads": 23,
-   "unique": 23,
-   "in_crm": 22,
+   "platform_leads": 56,
+   "unique": 56,
+   "in_crm": 55,
    "missing": 1,
-   "gap_pct": 4.3,
+   "gap_pct": 1.8,
    "from": null,
    "missing_campaigns": {
     "Instagram-LeadGeneration-SA-RUH-Female-IG-Posts-20261024": 1
@@ -109,28 +109,28 @@
   {
    "month": "2026-11",
    "platform": "snapchat",
-   "platform_leads": 21,
-   "unique": 21,
-   "in_crm": 16,
-   "missing": 5,
-   "gap_pct": 23.8,
+   "platform_leads": 57,
+   "unique": 56,
+   "in_crm": 18,
+   "missing": 38,
+   "gap_pct": 67.9,
    "from": null,
    "missing_campaigns": {
-    "b0a6f5fc-9cfe-4fd0-9c9e-f5f35314569d": 5
+    "Snapchat-Lead-Generation-SA-RUH-All-Laser-Offer-20260620": 38
    },
    "partial_platform": false
   },
   {
    "month": "2026-11",
    "platform": "tiktok",
-   "platform_leads": 32,
-   "unique": 32,
-   "in_crm": 30,
-   "missing": 2,
-   "gap_pct": 6.2,
+   "platform_leads": 85,
+   "unique": 85,
+   "in_crm": 82,
+   "missing": 3,
+   "gap_pct": 3.5,
    "from": null,
    "missing_campaigns": {
-    "Tiktok-Lead-Generation-SA-RUH-Female-All-Offers-20260624": 1,
+    "Tiktok-Lead-Generation-SA-RUH-Female-All-Offers-20260624": 2,
     "Tiktok-Lead-Generation-SA-RUH-Male-All-Offers-20260624": 1
    },
    "partial_platform": false

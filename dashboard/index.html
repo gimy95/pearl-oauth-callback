@@ -198,7 +198,7 @@ const I18N = {
     spend: 'Total Spend', impressions: 'Impressions', clicks: 'Clicks', ctr: 'CTR', cpc: 'CPC',
     platform_leads: 'Platform Leads', platform_cpl: 'Platform CPL', crm_leads: 'CRM Leads', cpl: 'CPL',
     bookings: 'Bookings (CRM)', booking_rate: 'Booking Rate', cpb: 'Cost / Booking', attended: 'Attended', paid: 'Paid',
-    no_shows: 'No-shows', target: 'target',
+    no_shows: 'No-shows', target: 'target', br_pl: 'Bookings ÷ Platform Leads',
     st_new: 'New', st_contacted: 'Contacted', st_booked: 'Booked+', st_attended: 'Attended', st_noanswer: 'No Answer',
     st_notq: 'Not Qualified',
     category: 'Category', est_bookings: 'Est. Bookings', act_bookings: 'Actual Bookings', leads: 'Leads',
@@ -257,7 +257,7 @@ const I18N = {
     spend: 'إجمالي الإنفاق', impressions: 'مرات الظهور', clicks: 'النقرات', ctr: 'معدل النقر', cpc: 'تكلفة النقرة',
     platform_leads: 'ليدات المنصة', platform_cpl: 'تكلفة ليد المنصة', crm_leads: 'ليدات CRM', cpl: 'تكلفة الليد',
     bookings: 'الحجوزات', booking_rate: 'معدل الحجز', cpb: 'تكلفة الحجز', attended: 'حضر', paid: 'تم الدفع',
-    no_shows: 'لم يحضر', target: 'الهدف',
+    no_shows: 'لم يحضر', target: 'الهدف', br_pl: 'الحجوزات ÷ ليدات المنصة',
     st_new: 'جديد', st_contacted: 'تم التواصل', st_booked: 'حجز فأعلى', st_attended: 'حضر', st_noanswer: 'لم يتم الرد',
     st_notq: 'غير مؤهل',
     category: 'الفئة', est_bookings: 'حجوزات متوقعة', act_bookings: 'حجوزات فعلية', leads: 'الليدات',
@@ -388,9 +388,12 @@ async function loadBase() {
   S.daily = (await rpcAll('dash_daily', { p_start: S.firstDay, p_end: riyadhToday() })).map(r => ({ ...r, day: String(r.day).slice(0, 10) }));
   S.loadedAt = new Date();
 }
+let rangeSeq = 0;
 async function loadRange() {
   const key = S.start + '|' + S.end; if (S.rangeKey === key) return;
+  const seq = ++rangeSeq;
   const [st, ad] = await Promise.all([rpcAll('dash_stages', { p_start: S.start, p_end: S.end }), rpcAll('dash_ads', { p_start: S.start, p_end: S.end })]);
+  if (seq !== rangeSeq) return;   // a newer range was requested meanwhile
   S.stages = st; S.ads = ad.map(r => ({ ...r, month: String(r.month).slice(0, 10) })); S.rangeKey = key;
 }
 async function loadAdsAll() {
@@ -407,8 +410,8 @@ function addRow(z, r) {
   z.paid += +r.paid || 0; z.ns += +r.no_shows || 0; return z;
 }
 function ratios(z) {
-  return Object.assign(z, { cpl: z.leads ? z.spend / z.leads : null, pcpl: z.pl ? z.spend / z.pl : null,
-    cpb: z.book ? z.spend / z.book : null, br: z.leads ? z.book / z.leads : null, ctr: z.imp ? z.clk / z.imp : null,
+  return Object.assign(z, { cpl: z.leads && z.spend ? z.spend / z.leads : null, pcpl: z.pl && z.spend ? z.spend / z.pl : null,
+    cpb: z.book && z.spend ? z.spend / z.book : null, br: z.leads ? z.book / z.leads : null, ctr: z.imp ? z.clk / z.imp : null,
     cpc: z.clk ? z.spend / z.clk : null, nsr: z.book ? z.ns / z.book : null, ar: z.book ? z.att / z.book : null });
 }
 function sumRows(rows) { const z = Z(); rows.forEach(r => addRow(z, r)); return ratios(z); }
@@ -540,7 +543,7 @@ function viewSummary() {
       </div></div>`).join('') || '—'}</div></div>
     <div class="panel">${H2('categories')}<div class="tbl"><table><thead><tr>
       <th>${L('category')}</th><th class="n">${L('spend')}</th><th class="n">${L('platform_leads')}</th><th class="n">${L('platform_cpl')}</th>
-      <th class="n">${L('est_bookings')}</th><th class="n">${L('act_bookings')}</th><th class="n">${L('booking_rate')}</th></tr></thead><tbody>
+      <th class="n">${L('est_bookings')}</th><th class="n">${L('act_bookings')}</th><th class="n">${L('br_pl')}</th></tr></thead><tbody>
       ${cats.map(c => `<tr><td>${esc(catName(c.cat))}${c.vv ? `<span class="tag">${esc(T('video_views'))}</span>` : ''}</td><td class="n">${money(c.spend)}</td>
         <td class="n">${num(c.pl)}</td><td class="n">${money(c.cpl)}</td><td class="n">${num1(c.est)}</td>
         <td class="n">${c.hasAct ? num(c.crmB) + (c.onlySnap ? '' : ' <span class="tag info">Snap</span>') : '—'}</td><td class="n">${pct(c.br)}</td></tr>`).join('')}
@@ -643,7 +646,7 @@ async function viewMonthly() {
   const today = riyadhToday();
   const months = []; for (let c = S.firstDay.slice(0, 7) + '-01'; c <= today; ) { months.push(c.slice(0, 7)); const d = s2d(c); d.setUTCMonth(d.getUTCMonth() + 1); c = d2s(d); }
   const mz = months.map(m => sumRows(S.daily.filter(r => r.day.slice(0, 7) === m && inPlat(r.platform))));
-  const body = mz.map((z, i) => { const p = i > 0 ? mz[i - 1] : null; return `<tr><td>${esc(monthLabel(months[i]))}${months[i] === today.slice(0, 7) ? ` <span class="tag info">${esc(T('in_progress'))}</span>` : ''}</td>
+  const body = mz.map((z, i) => { const p = i > 0 && months[i] !== today.slice(0, 7) ? mz[i - 1] : null; return `<tr><td>${esc(monthLabel(months[i]))}${months[i] === today.slice(0, 7) ? ` <span class="tag info">${esc(T('in_progress'))}</span>` : ''}</td>
     <td class="n">${money(z.spend)}${p ? delta(z.spend, p.spend) : ''}</td><td class="n">${num(z.pl)}${p ? delta(z.pl, p.pl) : ''}</td>
     <td class="n">${num(z.leads)}${p ? delta(z.leads, p.leads) : ''}</td><td class="n">${money(z.cpl)}${p ? delta(z.cpl, p.cpl, true) : ''}</td>
     <td class="n">${num(z.book)}${p ? delta(z.book, p.book) : ''}</td><td class="n">${money(z.cpb)}${p ? delta(z.cpb, p.cpb, true) : ''}</td>
@@ -676,7 +679,7 @@ async function renderGap() {
   let body = '';
   for (const m of months) {
     const rs = PLAT_ORDER.map(p => rows.find(r => r.month === m && r.platform === p)).filter(Boolean);
-    const tot = rs.filter(r => !r.partial_platform).reduce((a, r) => (a.pl += r.platform_leads, a.u += r.unique, a.in += r.in_crm, a.m += r.missing, a), { pl: 0, u: 0, in: 0, m: 0 });
+    const tot = rs.filter(r => !r.partial_platform || S.platform !== 'all').reduce((a, r) => (a.pl += r.platform_leads, a.u += r.unique, a.in += r.in_crm, a.m += r.missing, a), { pl: 0, u: 0, in: 0, m: 0 });
     const hot = m === months[0] && tot.m > 0 ? ' style="background:rgba(179,38,30,.10)"' : '';
     body += `<tr class="total"${hot}><td>${esc(monthLabel(m + '-01'))}${m === cur ? ` <span class="tag info">${esc(T('in_progress'))}</span>` : ''}</td><td>${esc(T('all_channels'))}</td>
       <td class="n">${num(tot.pl)}</td><td class="n">${num(tot.u)}</td><td class="n">${num(tot.in)}</td><td class="n"${cls(tot.m)}>${num(tot.m)}</td><td class="n"${cls(tot.m)}>${gp(tot.m, tot.u)}</td></tr>`;
@@ -731,7 +734,7 @@ function viewWeekly() {
   const today = riyadhToday(); const [, thisMon] = isoWeek(today); const start = addDays(thisMon, -7 * 11);
   const weeks = []; for (let c = start; c <= today; c = addDays(c, 7)) weeks.push(c);
   const wz = weeks.map(w => sumRows(rowsIn(w, addDays(w, 6))));
-  const body = wz.map((z, i) => { const p = i ? wz[i - 1] : null; const [lab] = isoWeek(weeks[i]); return `<tr><td>${esc(lab)}<span class="ar" style="direction:ltr;text-align:start">${esc(weeks[i])}</span></td>
+  const body = wz.map((z, i) => { const part = addDays(weeks[i], 6) > today; const p = i && !part ? wz[i - 1] : null; const [lab] = isoWeek(weeks[i]); return `<tr><td>${esc(lab)}${part ? ` <span class="tag info">${esc(T('in_progress'))}</span>` : ''}<span class="ar" style="direction:ltr;text-align:start">${esc(weeks[i])}</span></td>
     <td class="n">${money(z.spend)}${p ? delta(z.spend, p.spend) : ''}</td><td class="n">${num(z.pl)}${p ? delta(z.pl, p.pl) : ''}</td>
     <td class="n">${num(z.leads)}${p ? delta(z.leads, p.leads) : ''}</td><td class="n">${money(z.cpl)}${p ? delta(z.cpl, p.cpl, true) : ''}</td>
     <td class="n">${num(z.book)}${p ? delta(z.book, p.book) : ''}</td><td class="n">${money(z.cpb)}${p ? delta(z.cpb, p.cpb, true) : ''}</td><td class="n">${pct(z.br)}</td></tr>`; }).join('');
@@ -747,7 +750,7 @@ function viewWeekly() {
 
 // ───────── chrome ─────────
 function renderFresh() {
-  const parts = []; const recent = addDays(riyadhToday(), -45);
+  const parts = []; const recent = addDays(riyadhToday(), -2);
   for (const r of S.info) {
     if (r.source === 'crm') { const ts = r.last_loaded_at ? new Date(r.last_loaded_at).toLocaleString(LOCALE(), { timeZone: 'Asia/Riyadh', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) : '—';
       parts.push(`${esc(T('crm_import'))}: <b>${esc(ts)}</b>`); }
