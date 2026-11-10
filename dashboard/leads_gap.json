@@ -1,6 +1,6 @@
 {
- "crm_cutoff": "2026-11-10 14:25:08.108000",
- "generated": "2026-11-10 13:52:34",
+ "crm_cutoff": "2026-11-10 14:23:03",
+ "generated": "2026-11-10 20:30:00",
  "rows": [
   {
    "month": "2026-08",
@@ -111,12 +111,12 @@
    "platform": "snapchat",
    "platform_leads": 57,
    "unique": 56,
-   "in_crm": 18,
-   "missing": 38,
-   "gap_pct": 67.9,
+   "in_crm": 49,
+   "missing": 7,
+   "gap_pct": 12.5,
    "from": null,
    "missing_campaigns": {
-    "Snapchat-Lead-Generation-SA-RUH-All-Laser-Offer-20260620": 38
+    "Snapchat-Lead-Generation-SA-RUH-All-Laser-Offer-20260620": 7
    },
    "partial_platform": false
   },
@@ -125,13 +125,12 @@
    "platform": "tiktok",
    "platform_leads": 85,
    "unique": 85,
-   "in_crm": 82,
-   "missing": 3,
-   "gap_pct": 3.5,
+   "in_crm": 83,
+   "missing": 2,
+   "gap_pct": 2.4,
    "from": null,
    "missing_campaigns": {
-    "Tiktok-Lead-Generation-SA-RUH-Female-All-Offers-20260624": 2,
-    "Tiktok-Lead-Generation-SA-RUH-Male-All-Offers-20260624": 1
+    "Tiktok-Lead-Generation-SA-RUH-Female-All-Offers-20260624": 2
    },
    "partial_platform": false
   }
