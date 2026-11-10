@@ -198,7 +198,7 @@ const I18N = {
     spend: 'Total Spend', impressions: 'Impressions', clicks: 'Clicks', ctr: 'CTR', cpc: 'CPC',
     platform_leads: 'Platform Leads', platform_cpl: 'Platform CPL', crm_leads: 'CRM Leads', cpl: 'CPL',
     bookings: 'Bookings (CRM)', booking_rate: 'Booking Rate', cpb: 'Cost / Booking', attended: 'Attended', paid: 'Paid',
-    no_shows: 'No-shows', target: 'target', br_pl: 'Bookings ÷ Platform Leads',
+    matched: 'matched', no_shows: 'No-shows', target: 'target', br_pl: 'Bookings ÷ Platform Leads',
     st_new: 'New', st_contacted: 'Contacted', st_booked: 'Booked+', st_attended: 'Attended', st_noanswer: 'No Answer',
     st_notq: 'Not Qualified',
     category: 'Category', est_bookings: 'Est. Bookings', act_bookings: 'Actual Bookings', leads: 'Leads',
@@ -226,8 +226,8 @@ const I18N = {
     tk_followup: '{n} leads ({s}) are still New or No answer — follow-up may be behind.',
     n_kpi: 'Booking rate = CRM bookings ÷ CRM leads (same as the WhatsApp report). Platform leads are the lead-form submissions each platform reports; the CRM keeps one record per person, so it is usually lower. Spend, impressions and clicks exclude video-view (awareness) campaigns.',
     n_status: 'Contacted = Inquired + WhatsApp sent + Other. Not qualified = Wrong number + Location too far + Not interested. Booked+ = every lead that booked, including no-shows.',
-    n_cat: 'Category, audience and offer are read from campaign / ad-set / ad names — directional, not a tracked field. Actual bookings exist for Snapchat (each CRM lead records its exact ad); for TikTok and Meta, Est. bookings = platform leads × that platform\'s booking rate.',
-    n_camp: 'Actual bookings: Snapchat CRM leads carry the exact ad they came from (since 20 Jun 2026). TikTok/Meta leads do not, so their bookings are estimated from the platform booking rate (≈).',
+    n_cat: 'Category, audience and offer are read from campaign / ad-set / ad names — directional, not a tracked field. Actual bookings are shown where the CRM lead is tied to its ad: Snapchat (the lead records its exact ad) and Meta (leads matched by phone to the lead-form exports). TikTok leads are not tied to an ad yet, so Est. bookings = platform leads × that platform\'s booking rate.',
+    n_camp: 'Actual bookings: Snapchat CRM leads carry the exact ad they came from (since 20 Jun 2026). Meta leads are matched by phone to the lead-form exports (from 31 Oct 2026), so counts can be lower than the CRM total. TikTok bookings are estimated from the platform booking rate (≈).',
     n_trend: 'Always shows the last 6 calendar months, independent of the date filter (still respects the platform filter).',
     n_matrix: 'The latest month is partial. Bookings here are estimated (≈) except Snapchat, which are actual.',
     n_rules: [
@@ -257,7 +257,7 @@ const I18N = {
     spend: 'إجمالي الإنفاق', impressions: 'مرات الظهور', clicks: 'النقرات', ctr: 'معدل النقر', cpc: 'تكلفة النقرة',
     platform_leads: 'ليدات المنصة', platform_cpl: 'تكلفة ليد المنصة', crm_leads: 'ليدات CRM', cpl: 'تكلفة الليد',
     bookings: 'الحجوزات', booking_rate: 'معدل الحجز', cpb: 'تكلفة الحجز', attended: 'حضر', paid: 'تم الدفع',
-    no_shows: 'لم يحضر', target: 'الهدف', br_pl: 'الحجوزات ÷ ليدات المنصة',
+    matched: 'مطابق', no_shows: 'لم يحضر', target: 'الهدف', br_pl: 'الحجوزات ÷ ليدات المنصة',
     st_new: 'جديد', st_contacted: 'تم التواصل', st_booked: 'حجز فأعلى', st_attended: 'حضر', st_noanswer: 'لم يتم الرد',
     st_notq: 'غير مؤهل',
     category: 'الفئة', est_bookings: 'حجوزات متوقعة', act_bookings: 'حجوزات فعلية', leads: 'الليدات',
@@ -285,8 +285,8 @@ const I18N = {
     tk_followup: '{n} ليد ({s}) ما زالت جديدة أو لم يتم الرد — قد تكون المتابعة متأخرة.',
     n_kpi: 'معدل الحجز = حجوزات CRM ÷ ليدات CRM (مثل تقرير الواتساب). ليدات المنصة هي النماذج التي تسجلها كل منصة، وCRM يحفظ سجلاً واحداً لكل شخص لذلك يكون عادة أقل. الإنفاق والظهور والنقرات لا تشمل حملات مشاهدات الفيديو.',
     n_status: 'تم التواصل = استفسار + واتساب + أخرى. غير مؤهل = رقم خاطئ + موقع بعيد + غير مهتم. حجز فأعلى = كل من حجز بما فيهم من لم يحضر.',
-    n_cat: 'الفئة والجمهور والعرض مستنتجة من أسماء الحملات والإعلانات — تقريبية. الحجوزات الفعلية متاحة لسناب شات (كل ليد مسجل بإعلانه)، أما تيك توك وميتا فالحجوزات المتوقعة = ليدات المنصة × معدل حجز المنصة.',
-    n_camp: 'الحجوزات الفعلية: ليدات سناب في CRM تحمل اسم الإعلان (منذ 20 يونيو 2026). تيك توك وميتا لا تحمل ذلك، لذلك حجوزاتها تقديرية (≈).',
+    n_cat: 'الفئة والجمهور والعرض مستنتجة من أسماء الحملات والإعلانات — تقريبية. الحجوزات الفعلية متاحة حيث يرتبط الليد بإعلانه: سناب شات (الليد يحمل إعلانه) وميتا (مطابقة برقم الجوال مع ملفات النماذج). ليدات تيك توك غير مرتبطة بإعلان بعد، لذلك الحجوزات المتوقعة = ليدات المنصة × معدل حجز المنصة.',
+    n_camp: 'الحجوزات الفعلية: ليدات سناب في CRM تحمل اسم الإعلان (منذ 20 يونيو 2026). وليدات ميتا تُطابق برقم الجوال مع ملفات النماذج (من 31 أكتوبر 2026) وقد تقل عن إجمالي CRM. حجوزات تيك توك تقديرية (≈).',
     n_trend: 'يعرض دائماً آخر 6 أشهر بغض النظر عن فلتر التاريخ (مع احترام فلتر المنصة).',
     n_matrix: 'الشهر الأخير جزئي. الحجوزات هنا تقديرية (≈) ما عدا سناب شات فهي فعلية.',
     n_rules: [
@@ -546,7 +546,7 @@ function viewSummary() {
       <th class="n">${L('est_bookings')}</th><th class="n">${L('act_bookings')}</th><th class="n">${L('br_pl')}</th></tr></thead><tbody>
       ${cats.map(c => `<tr><td>${esc(catName(c.cat))}${c.vv ? `<span class="tag">${esc(T('video_views'))}</span>` : ''}</td><td class="n">${money(c.spend)}</td>
         <td class="n">${num(c.pl)}</td><td class="n">${money(c.cpl)}</td><td class="n">${num1(c.est)}</td>
-        <td class="n">${c.hasAct ? num(c.crmB) + (c.onlySnap ? '' : ' <span class="tag info">Snap</span>') : '—'}</td><td class="n">${pct(c.br)}</td></tr>`).join('')}
+        <td class="n">${c.hasAct ? num(c.crmB) + (c.onlySnap ? '' : ' <span class="tag info">' + esc(T('matched')) + '</span>') : '—'}</td><td class="n">${pct(c.br)}</td></tr>`).join('')}
     </tbody></table></div><div class="note">${esc(T('n_cat'))}</div></div>`;
   // charts
   const n = daysBetween(S.start, S.end); const g2 = n <= 62 ? 'day' : n <= 370 ? 'week' : 'month';
