@@ -1,6 +1,6 @@
 {
  "crm_cutoff": "2026-11-11 15:47:54.523000",
- "generated": "2026-11-11 16:15:32",
+ "generated": "2026-11-11 16:17:43",
  "rows": [
   {
    "month": "2026-08",
@@ -97,12 +97,12 @@
    "platform": "meta",
    "platform_leads": 39,
    "unique": 39,
-   "in_crm": 33,
-   "missing": 6,
-   "gap_pct": 15.4,
+   "in_crm": 38,
+   "missing": 1,
+   "gap_pct": 2.6,
    "from": null,
    "missing_campaigns": {
-    "Instagram-LeadGeneration-SA-RUH-Female-IG-Posts-20261024": 6
+    "Instagram-LeadGeneration-SA-RUH-Female-IG-Posts-20261024": 1
    },
    "partial_platform": true
   },
@@ -125,13 +125,13 @@
    "platform": "tiktok",
    "platform_leads": 97,
    "unique": 97,
-   "in_crm": 81,
-   "missing": 16,
-   "gap_pct": 16.5,
+   "in_crm": 94,
+   "missing": 3,
+   "gap_pct": 3.1,
    "from": null,
    "missing_campaigns": {
-    "Tiktok-Lead-Generation-SA-RUH-Male-All-Offers-20260624": 10,
-    "Tiktok-Lead-Generation-SA-RUH-Female-All-Offers-20260624": 6
+    "Tiktok-Lead-Generation-SA-RUH-Female-All-Offers-20260624": 2,
+    "Tiktok-Lead-Generation-SA-RUH-Male-All-Offers-20260624": 1
    },
    "partial_platform": false
   }
