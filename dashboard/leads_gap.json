@@ -1,6 +1,6 @@
 {
- "crm_cutoff": "2026-11-10 14:23:03",
- "generated": "2026-11-10 20:30:00",
+ "crm_cutoff": "2026-11-11 15:47:54.523000",
+ "generated": "2026-11-11 16:15:32",
  "rows": [
   {
    "month": "2026-08",
@@ -38,7 +38,7 @@
    "gap_pct": 2.0,
    "from": null,
    "missing_campaigns": {
-    "Snapchat-Lead-Generation-SA-RUH-All-Laser-Offer-20260620": 4
+    "b0a6f5fc-9cfe-4fd0-9c9e-f5f35314569d": 4
    },
    "partial_platform": false
   },
@@ -76,7 +76,7 @@
    "gap_pct": 1.0,
    "from": null,
    "missing_campaigns": {
-    "Snapchat-Lead-Generation-SA-RUH-All-Laser-Offer-20260620": 1
+    "b0a6f5fc-9cfe-4fd0-9c9e-f5f35314569d": 1
    },
    "partial_platform": false
   },
@@ -95,42 +95,43 @@
   {
    "month": "2026-11",
    "platform": "meta",
-   "platform_leads": 56,
-   "unique": 56,
-   "in_crm": 55,
-   "missing": 1,
-   "gap_pct": 1.8,
+   "platform_leads": 39,
+   "unique": 39,
+   "in_crm": 33,
+   "missing": 6,
+   "gap_pct": 15.4,
    "from": null,
    "missing_campaigns": {
-    "Instagram-LeadGeneration-SA-RUH-Female-IG-Posts-20261024": 1
+    "Instagram-LeadGeneration-SA-RUH-Female-IG-Posts-20261024": 6
    },
    "partial_platform": true
   },
   {
    "month": "2026-11",
    "platform": "snapchat",
-   "platform_leads": 57,
-   "unique": 56,
-   "in_crm": 49,
-   "missing": 7,
-   "gap_pct": 12.5,
+   "platform_leads": 69,
+   "unique": 67,
+   "in_crm": 53,
+   "missing": 14,
+   "gap_pct": 20.9,
    "from": null,
    "missing_campaigns": {
-    "Snapchat-Lead-Generation-SA-RUH-All-Laser-Offer-20260620": 7
+    "b0a6f5fc-9cfe-4fd0-9c9e-f5f35314569d": 14
    },
    "partial_platform": false
   },
   {
    "month": "2026-11",
    "platform": "tiktok",
-   "platform_leads": 85,
-   "unique": 85,
-   "in_crm": 83,
-   "missing": 2,
-   "gap_pct": 2.4,
+   "platform_leads": 97,
+   "unique": 97,
+   "in_crm": 81,
+   "missing": 16,
+   "gap_pct": 16.5,
    "from": null,
    "missing_campaigns": {
-    "Tiktok-Lead-Generation-SA-RUH-Female-All-Offers-20260624": 2
+    "Tiktok-Lead-Generation-SA-RUH-Male-All-Offers-20260624": 10,
+    "Tiktok-Lead-Generation-SA-RUH-Female-All-Offers-20260624": 6
    },
    "partial_platform": false
   }
