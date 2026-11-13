@@ -44,6 +44,7 @@ html[dir=rtl] .hmeta{align-items:flex-start}
 .hbtn{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.35);color:#fff;border-radius:8px;padding:6px 12px}
 .hbtn:hover{background:rgba(255,255,255,.22)}
 .fresh{background:var(--blush);border-bottom:1px solid var(--line);padding:6px 28px;font-size:12px;color:var(--muted);display:flex;gap:16px;flex-wrap:wrap}
+h3.sub{font-size:13px;font-weight:600;margin:14px 0 6px;color:var(--muted)}
 .fresh b{color:var(--ink);font-weight:600} .fresh .warn{color:var(--bad)}
 nav{background:var(--card);border-bottom:1px solid var(--line);display:flex;gap:2px;padding:0 20px;overflow-x:auto;position:sticky;top:0;z-index:10}
 nav button{background:none;border:0;border-bottom:3px solid transparent;padding:14px 16px;color:var(--muted);white-space:nowrap;font-weight:600}
@@ -198,7 +199,7 @@ const I18N = {
     spend: 'Total Spend', impressions: 'Impressions', clicks: 'Clicks', ctr: 'CTR', cpc: 'CPC',
     platform_leads: 'Platform Leads', platform_cpl: 'Platform CPL', crm_leads: 'CRM Leads', cpl: 'CPL',
     bookings: 'Bookings (CRM)', booking_rate: 'Booking Rate', cpb: 'Cost / Booking', attended: 'Attended', paid: 'Paid',
-    matched: 'matched', no_shows: 'No-shows', target: 'target', br_pl: 'Bookings ÷ Platform Leads',
+    matched: 'matched', not_tied: 'Bookings not tied to an ad', no_source_b: 'Bookings with no source (not tied to a platform)', no_shows: 'No-shows', target: 'target', br_pl: 'Bookings ÷ Platform Leads',
     st_new: 'New', st_contacted: 'Contacted', st_booked: 'Booked+', st_attended: 'Attended', st_noanswer: 'No Answer',
     st_notq: 'Not Qualified',
     category: 'Category', est_bookings: 'Est. Bookings', act_bookings: 'Actual Bookings', leads: 'Leads',
@@ -217,6 +218,10 @@ const I18N = {
     in_progress: 'partial', video_views: 'video views', excl: 'excluded from spend',
     fresh_through: 'Data through', crm_import: 'CRM import', no_spend_since: 'no spend since',
     best_cell: 'Green = best channel for that category and month.',
+    lt_title: 'Lead Timing', lt_day: 'Leads per day (CRM leads, Riyadh time)', lt_hour: 'Leads by hour of day (Riyadh time)',
+    lt_wd: 'Leads and booking rate by weekday', lt_br: 'Booking rate',
+    lt_sum: '{n} leads ({s}) arrive between 9 PM and 3 AM. Busiest weekday: {b} ({bn} leads/day on average); quietest: {q} ({qn}/day).',
+    lt_note: 'Counted from the CRM creation time of each lead, converted to Riyadh time; one lead per person per 30 days. Booking rate by hour shows when the leads that book tend to arrive, which helps plan call-centre cover and ad scheduling.',
     tk_best: '{p} has the best booking rate at {r} ({c} per booking).',
     tk_worst: '{p} lags at {r} booking rate — worth a closer look at lead quality and follow-up there.',
     tk_cpl_down: 'CPL is down {x} vs. the previous period ({a} → {b}).',
@@ -227,7 +232,7 @@ const I18N = {
     n_kpi: 'Booking rate = CRM bookings ÷ CRM leads (same as the WhatsApp report). Platform leads are the lead-form submissions each platform reports; the CRM keeps one record per person, so it is usually lower. Spend, impressions and clicks exclude video-view (awareness) campaigns.',
     n_status: 'Contacted = Inquired + WhatsApp sent + Other. Not qualified = Wrong number + Location too far + Not interested. Booked+ = every lead that booked, including no-shows.',
     n_cat: 'Category, audience and offer are read from campaign / ad-set / ad names — directional, not a tracked field. Bookings are actual when at least 85% of that platform-month\'s CRM leads are tied to their ad (Snapchat: the lead records its exact ad; TikTok and Meta: leads matched by phone to the lead-form exports); otherwise they are estimated (≈) = platform leads × that platform\'s booking rate.',
-    n_camp: 'Actual bookings: Snapchat CRM leads carry the exact ad they came from (since 20 Jun 2026). TikTok (from 12 Aug 2026) and Meta (from 31 Oct 2026) leads are matched by phone to the lead-form exports. Months where fewer than 85% of CRM leads could be tied to an ad stay estimated (≈). TikTok lead forms identify the ad group and campaign but not the individual ad, so TikTok bookings are actual at campaign / ad-set level and estimated (≈) at ad level.',
+    n_camp: 'Tables are grouped by channel. Leads are counted once per person: the same phone again within 30 days is the same lead. TikTok leads are now matched daily through the TikTok lead-form API. New-format Snapchat sources (lead form + campaign) are tied to the ad set that ran that form. Actual bookings: Snapchat CRM leads carry the exact ad they came from (since 20 Jun 2026). TikTok (from 12 Aug 2026) and Meta (from 31 Oct 2026) leads are matched by phone to the lead-form exports. Months where fewer than 85% of CRM leads could be tied to an ad stay estimated (≈). TikTok lead forms identify the ad group and campaign but not the individual ad, so TikTok bookings are actual at campaign / ad-set level and estimated (≈) at ad level.',
     n_trend: 'Always shows the last 6 calendar months, independent of the date filter (still respects the platform filter).',
     n_matrix: 'The latest month is partial. Bookings are actual where at least 85% of the month\'s CRM leads are tied to an ad, otherwise estimated.',
     n_rules: [
@@ -257,7 +262,7 @@ const I18N = {
     spend: 'إجمالي الإنفاق', impressions: 'مرات الظهور', clicks: 'النقرات', ctr: 'معدل النقر', cpc: 'تكلفة النقرة',
     platform_leads: 'ليدات المنصة', platform_cpl: 'تكلفة ليد المنصة', crm_leads: 'ليدات CRM', cpl: 'تكلفة الليد',
     bookings: 'الحجوزات', booking_rate: 'معدل الحجز', cpb: 'تكلفة الحجز', attended: 'حضر', paid: 'تم الدفع',
-    matched: 'مطابق', no_shows: 'لم يحضر', target: 'الهدف', br_pl: 'الحجوزات ÷ ليدات المنصة',
+    matched: 'مطابق', not_tied: 'حجوزات غير مرتبطة بإعلان', no_source_b: 'حجوزات بدون مصدر (غير مرتبطة بمنصة)', no_shows: 'لم يحضر', target: 'الهدف', br_pl: 'الحجوزات ÷ ليدات المنصة',
     st_new: 'جديد', st_contacted: 'تم التواصل', st_booked: 'حجز فأعلى', st_attended: 'حضر', st_noanswer: 'لم يتم الرد',
     st_notq: 'غير مؤهل',
     category: 'الفئة', est_bookings: 'حجوزات متوقعة', act_bookings: 'حجوزات فعلية', leads: 'الليدات',
@@ -276,6 +281,10 @@ const I18N = {
     in_progress: 'جزئي', video_views: 'مشاهدات فيديو', excl: 'مستبعدة من الإنفاق',
     fresh_through: 'البيانات حتى', crm_import: 'آخر استيراد CRM', no_spend_since: 'لا إنفاق منذ',
     best_cell: 'الأخضر = أفضل منصة لتلك الفئة في ذلك الشهر.',
+    lt_title: 'توقيت الليدات', lt_day: 'الليدات يومياً (CRM، بتوقيت الرياض)', lt_hour: 'الليدات حسب ساعة اليوم (بتوقيت الرياض)',
+    lt_wd: 'الليدات ومعدل الحجز حسب يوم الأسبوع', lt_br: 'معدل الحجز',
+    lt_sum: '{n} ليد ({s}) تصل بين 9 مساءً و3 فجراً. أكثر يوم: {b} (بمتوسط {bn} ليد يومياً)، وأقل يوم: {q} ({qn} يومياً).',
+    lt_note: 'محسوبة من وقت إنشاء الليد في CRM بتوقيت الرياض، وليد واحد لكل شخص خلال 30 يوماً. معدل الحجز حسب الساعة يوضح متى تصل الليدات التي تحجز، لتخطيط تغطية الاتصال وجدولة الإعلانات.',
     tk_best: '{p} لديها أفضل معدل حجز {r} (تكلفة الحجز {c}).',
     tk_worst: '{p} أقل بمعدل حجز {r} — تستحق مراجعة جودة الليدات والمتابعة.',
     tk_cpl_down: 'تكلفة الليد انخفضت {x} مقارنة بالفترة السابقة ({a} ← {b}).',
@@ -286,7 +295,7 @@ const I18N = {
     n_kpi: 'معدل الحجز = حجوزات CRM ÷ ليدات CRM (مثل تقرير الواتساب). ليدات المنصة هي النماذج التي تسجلها كل منصة، وCRM يحفظ سجلاً واحداً لكل شخص لذلك يكون عادة أقل. الإنفاق والظهور والنقرات لا تشمل حملات مشاهدات الفيديو.',
     n_status: 'تم التواصل = استفسار + واتساب + أخرى. غير مؤهل = رقم خاطئ + موقع بعيد + غير مهتم. حجز فأعلى = كل من حجز بما فيهم من لم يحضر.',
     n_cat: 'الفئة والجمهور والعرض مستنتجة من أسماء الحملات والإعلانات — تقريبية. الحجوزات فعلية عندما يرتبط 85% على الأقل من ليدات CRM لتلك المنصة والشهر بإعلانها (سناب: الليد يحمل إعلانه؛ تيك توك وميتا: مطابقة برقم الجوال مع ملفات النماذج)، وإلا فهي تقديرية (≈) = ليدات المنصة × معدل حجز المنصة.',
-    n_camp: 'الحجوزات الفعلية: ليدات سناب في CRM تحمل اسم الإعلان (منذ 20 يونيو 2026). وليدات تيك توك (من 12 أغسطس 2026) وميتا (من 31 أكتوبر 2026) تُطابق برقم الجوال مع ملفات النماذج. الأشهر التي يقل فيها الربط عن 85% تبقى تقديرية (≈). نماذج تيك توك تحدد المجموعة الإعلانية والحملة دون الإعلان نفسه، لذا حجوزات تيك توك فعلية على مستوى الحملة والمجموعة وتقديرية (≈) على مستوى الإعلان.',
+    n_camp: 'الجداول مرتبة حسب القناة. يُحتسب الليد مرة واحدة لكل شخص: نفس الرقم خلال 30 يوماً = ليد واحد. ليدات تيك توك تُطابق يومياً عبر واجهة نماذج تيك توك، ومصادر سناب الجديدة (اسم النموذج + الحملة) تُربط بالمجموعة الإعلانية التي استخدمت النموذج. الحجوزات الفعلية: ليدات سناب في CRM تحمل اسم الإعلان (منذ 20 يونيو 2026). وليدات تيك توك (من 12 أغسطس 2026) وميتا (من 31 أكتوبر 2026) تُطابق برقم الجوال مع ملفات النماذج. الأشهر التي يقل فيها الربط عن 85% تبقى تقديرية (≈). نماذج تيك توك تحدد المجموعة الإعلانية والحملة دون الإعلان نفسه، لذا حجوزات تيك توك فعلية على مستوى الحملة والمجموعة وتقديرية (≈) على مستوى الإعلان.',
     n_trend: 'يعرض دائماً آخر 6 أشهر بغض النظر عن فلتر التاريخ (مع احترام فلتر المنصة).',
     n_matrix: 'الشهر الأخير جزئي. الحجوزات فعلية حيث يرتبط 85% على الأقل من ليدات CRM للشهر بإعلان، وإلا فهي تقديرية.',
     n_rules: [
@@ -368,6 +377,7 @@ function presetRange(p) {
 // ───────── data ─────────
 async function rpcAll(fn, args) {
   if (S.test) { const t = (window.__TESTDATA__ || {})[fn] || [];
+    if (fn === 'dash_lead_timing') return t.filter(r => String(r.day).slice(0, 10) >= args.p_start && String(r.day).slice(0, 10) <= args.p_end);
     if (fn === 'dash_ads' && args && args.p_start) return t.filter(r => String(r.month).slice(0, 7) >= args.p_start.slice(0, 7) && String(r.month).slice(0, 7) <= args.p_end.slice(0, 7));
     return t; }
   const page = 1000; let from = 0, out = [];
@@ -392,9 +402,10 @@ let rangeSeq = 0;
 async function loadRange() {
   const key = S.start + '|' + S.end; if (S.rangeKey === key) return;
   const seq = ++rangeSeq;
-  const [st, ad] = await Promise.all([rpcAll('dash_stages', { p_start: S.start, p_end: S.end }), rpcAll('dash_ads', { p_start: S.start, p_end: S.end })]);
+  const [st, ad, tm] = await Promise.all([rpcAll('dash_stages', { p_start: S.start, p_end: S.end }), rpcAll('dash_ads', { p_start: S.start, p_end: S.end }),
+    rpcAll('dash_lead_timing', { p_start: S.start, p_end: S.end }).catch(() => [])]);
   if (seq !== rangeSeq) return;   // a newer range was requested meanwhile
-  S.stages = st; S.ads = ad.map(r => ({ ...r, month: String(r.month).slice(0, 10) })); S.rangeKey = key;
+  S.timing = tm.map(r => ({ ...r, day: String(r.day).slice(0, 10) })); S.stages = st; S.ads = ad.map(r => ({ ...r, month: String(r.month).slice(0, 10) })); S.rangeKey = key;
 }
 async function loadAdsAll() {
   if (S.adsAll) return;
@@ -607,28 +618,43 @@ function viewPlatforms() {
     options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', rtl: S.lang === 'ar' }, tooltip: { callbacks: { label: c => `${c.label}: ${money(c.parsed)}` } } } } });
 }
 
-function aggTable(list, nameKey, nameFn, extraCols) {
+function aggTable(list, nameKey, nameFn, extraCols, foot) {
   return `<div class="tbl"><table><thead><tr><th>${L(nameKey)}</th><th>${L('platform')}</th>${extraCols ? extraCols.map(c => `<th>${L(c)}</th>`).join('') : ''}
     <th class="n">${L('spend')}</th><th class="n">${L('impressions')}</th><th class="n">${L('clicks')}</th><th class="n">${L('ctr')}</th>
     <th class="n">${L('platform_leads')}</th><th class="n">${L('platform_cpl')}</th><th class="n">${L('est_bookings')}</th>
     <th class="n">${L('act_bookings')}</th><th class="n">${L('cpb')}</th></tr></thead><tbody>
     ${list.map(g => `<tr><td class="wrap">${esc(nameFn(g))}${g.vv && !g.spend ? `<span class="tag">${esc(T('video_views'))}</span>` : ''}</td>
       <td>${[...g.plats].map(p => `<span class="dot" style="background:${pcolor(p)}"></span>${esc(pname(p))}`).join(' ')}</td>
-      ${extraCols ? extraCols.map(c => `<td>${esc(g[c] == null ? '' : (c === 'category' ? catName(g[c]) : c === 'gender' ? (S.lang === 'ar' ? GENDER_AR[g[c]] || g[c] : g[c]) : g[c]))}</td>`).join('') : ''}
+      ${extraCols ? extraCols.map(c => `<td class="${c === 'campaign' || c === 'adset' ? 'wrap' : ''}">${esc(g[c] == null ? '' : (c === 'category' ? catName(g[c]) : c === 'gender' ? (S.lang === 'ar' ? GENDER_AR[g[c]] || g[c] : g[c]) : g[c]))}</td>`).join('') : ''}
       <td class="n">${money(g.spend)}</td><td class="n">${num(g.imp)}</td><td class="n">${num(g.clk)}</td><td class="n">${pct(g.ctr, 2)}</td>
       <td class="n">${num(g.pl)}</td><td class="n">${money(g.cpl)}</td><td class="n">${g.onlySnap ? '' : '≈'}${num1(g.est)}</td>
       <td class="n">${g.hasAct ? num(g.crmB) : '—'}</td><td class="n">${g.cpb == null ? '—' : (g.onlySnap ? '' : '≈') + money(g.cpb)}</td></tr>`).join('') || `<tr><td colspan="12">—</td></tr>`}
+    ${(foot || []).map(f => `<tr class="total"><td class="wrap">${esc(f.label)}</td><td>${f.p ? `<span class="dot" style="background:${pcolor(f.p)}"></span>${esc(pname(f.p))}` : ''}</td>
+      <td colspan="${7 + (extraCols ? extraCols.length : 0)}"></td><td class="n">${num(f.b)}</td><td></td></tr>`).join('')}
   </tbody></table></div>`;
 }
+const chanIdx = (g) => Math.min(...[...g.plats].map(p => { const i = PLAT_ORDER.indexOf(p); return i < 0 ? 99 : i; }));
+const byChannel = (a, b) => chanIdx(a) - chanIdx(b) || b.spend - a.spend;
 function viewCampaigns() {
   const ads = adsInPlat(S.ads);
-  const camps = adsAgg(ads, r => r.platform + '|' + r.campaign_name, r => ({ name: r.campaign_name, category: r.category })).sort((a, b) => b.spend - a.spend);
-  const sets = adsAgg(ads, r => r.platform + '|' + r.adgroup_name, r => ({ name: r.adgroup_name, category: r.category, gender: r.gender })).sort((a, b) => b.spend - a.spend);
-  const adl = adsAgg(ads, r => r.platform + '|' + r.adgroup_name + '|' + r.ad_name, r => ({ name: r.ad_name, category: r.category, gender: r.gender, offer: r.offer_sar ? r.offer_sar + ' ' + SAR() : '' }), true)
-    .sort((a, b) => b.spend - a.spend).slice(0, 60);
-  $('view').innerHTML = `<div class="panel">${H2('campaign_lvl')}${aggTable(camps, 'campaign', g => g.name)}<div class="note">${esc(T('n_camp'))}</div></div>
-    <div class="panel">${H2('adset_lvl')}${aggTable(sets, 'adset', g => g.name, ['category', 'gender'])}</div>
-    <div class="panel">${H2('ad_lvl')}${aggTable(adl, 'ad', g => g.name, ['category', 'gender', 'offer'])}</div>`;
+  const camps = adsAgg(ads, r => r.platform + '|' + r.campaign_name, r => ({ name: r.campaign_name, category: r.category })).sort(byChannel);
+  const sets = adsAgg(ads, r => r.platform + '|' + r.campaign_name + '|' + r.adgroup_name,
+    r => ({ name: r.adgroup_name, campaign: r.campaign_name, category: r.category })).sort(byChannel);
+  const adl = adsAgg(ads, r => r.platform + '|' + r.campaign_name + '|' + r.adgroup_name + '|' + r.ad_name,
+    r => ({ name: r.ad_name, campaign: r.campaign_name, adset: r.adgroup_name, category: r.category }), true)
+    .sort((a, b) => b.spend - a.spend).slice(0, 60).sort(byChannel);
+  // reconciliation: CRM bookings of each platform that are not tied to any ad, and bookings with no source
+  const rows = rowsIn(S.start, S.end, false); const foot = [];
+  for (const p of PLAT_ORDER) {
+    if (!inPlat(p)) continue;
+    const tot = sumRows(rows.filter(r => r.platform === p)).book;
+    if (p === 'unknown') { if (tot) foot.push({ label: T('no_source_b'), p: null, b: tot }); continue; }
+    const tied = camps.filter(g => g.plats.has(p)).reduce((a, g) => a + g.crmB, 0);
+    if (tot - tied > 0) foot.push({ label: T('not_tied'), p, b: tot - tied });
+  }
+  $('view').innerHTML = `<div class="panel">${H2('campaign_lvl')}${aggTable(camps, 'campaign', g => g.name, null, foot)}<div class="note">${esc(T('n_camp'))}</div></div>
+    <div class="panel">${H2('adset_lvl')}${aggTable(sets, 'adset', g => g.name, ['campaign', 'category'])}</div>
+    <div class="panel">${H2('ad_lvl')}${aggTable(adl, 'ad', g => g.name, ['campaign', 'adset', 'category'])}</div>`;
 }
 
 function viewFunnel() {
@@ -653,7 +679,54 @@ function viewFunnel() {
         <td class="n">${num(r.tot)}</td><td class="n">${pct(total ? r.tot / total : null)}</td></tr>`).join('')}
       <tr class="total"><td>${esc(T('total_leads'))}</td>${plats.map(p => `<td class="n">${num(ptot[p])}</td><td class="n">100%</td>`).join('')}<td class="n">${num(total)}</td><td class="n">100%</td></tr>
       <tr class="total"><td>${esc(T('booking_rate'))}</td>${plats.map(p => `<td class="n" colspan="2">${pct(ptot[p] ? pbook[p] / ptot[p] : null)}</td>`).join('')}<td class="n" colspan="2">${pct(total ? rows.filter(r => r.booked).reduce((a, r) => a + r.tot, 0) / total : null)}</td></tr>
-    </tbody></table></div><div class="note">${esc(T('n_status'))}</div></div>`;
+    </tbody></table></div><div class="note">${esc(T('n_status'))}</div></div>${timingPanel()}`;
+  drawTiming();
+}
+const WD_EN = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+const WD_AR = ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
+const wdName = (i) => (S.lang === 'ar' ? WD_AR : WD_EN)[i];
+function timingRows() { return (S.timing || []).filter(r => inPlat(r.platform)); }
+function timingPanel() {
+  const rows = timingRows(); const tot = rows.reduce((a, r) => a + (+r.leads), 0);
+  if (!tot) return '';
+  const night = rows.filter(r => r.hour >= 21 || r.hour < 3).reduce((a, r) => a + (+r.leads), 0);
+  // average per occurrence of each weekday in the range, so a range with one Saturday and two Tuesdays compares fairly
+  const wd = Array(7).fill(0), occ = Array(7).fill(0);
+  rows.forEach(r => { wd[s2d(r.day).getUTCDay()] += +r.leads; });
+  for (let c = S.start; c <= S.end; c = addDays(c, 1)) occ[s2d(c).getUTCDay()]++;
+  const avg = wd.map((n, i) => occ[i] ? n / occ[i] : null);
+  const order = [...avg.keys()].filter(i => avg[i] != null).sort((a, b) => avg[b] - avg[a]);
+  const q = order[order.length - 1], f1 = v => (Math.round(v * 10) / 10).toString();
+  const sum = fill(T('lt_sum'), { n: num(night), s: pct(night / tot, 0), b: wdName(order[0]), bn: f1(avg[order[0]]), q: wdName(q), qn: f1(avg[q]) });
+  return `<div class="panel">${H2('lt_title')}<div class="takeaways"><ul><li><span class="ico">🕘</span><span>${esc(sum)}</span></li></ul></div>
+    <div class="chart"><canvas id="c_lt_day"></canvas></div>
+    <div class="grid2"><div><h3 class="sub">${esc(T('lt_hour'))}</h3><div class="chart"><canvas id="c_lt_hour"></canvas></div></div>
+      <div><h3 class="sub">${esc(T('lt_wd'))}</h3><div class="chart"><canvas id="c_lt_wd"></canvas></div></div></div>
+    <div class="note">${esc(T('lt_note'))}</div></div>`;
+}
+function drawTiming() {
+  const rows = timingRows(); if (!rows.length) return;
+  const days = []; for (let c = S.start; c <= S.end; c = addDays(c, 1)) days.push(c);
+  const plats = PLAT_ORDER.filter(p => rows.some(r => r.platform === p));
+  const cnt = (f) => rows.filter(f).reduce((a, r) => a + (+r.leads), 0);
+  const bk = (f) => rows.filter(f).reduce((a, r) => a + (+r.bookings), 0);
+  const o1 = opts({ stacked: true }); o1.plugins.title = { display: true, text: T('lt_day') };
+  chart('c_lt_day', { type: 'bar', data: { labels: days.map(dateLabel), datasets: plats.map(p => ({ label: pname(p),
+    data: days.map(d => cnt(r => r.day === d && r.platform === p)), backgroundColor: pcolor(p), stack: 's' })) }, options: o1 });
+  const hrs = [...Array(24).keys()];
+  const brLine = (keys, f) => keys.map(k => { const n = cnt(r => f(r, k)); return n >= 10 ? +(bk(r => f(r, k)) / n * 100).toFixed(1) : null; });
+  const oh = opts({ stacked: true, y2: true }); oh.scales.y2.ticks = { callback: v => v + '%' };
+  oh.plugins.tooltip.callbacks.label = (c) => `${c.dataset.label}: ${c.dataset.yAxisID === 'y2' ? c.parsed.y + '%' : num(c.parsed.y)}`;
+  chart('c_lt_hour', { data: { labels: hrs.map(h => String(h).padStart(2, '0')), datasets: [
+    ...plats.map(p => ({ type: 'bar', label: pname(p), data: hrs.map(h => cnt(r => r.hour === h && r.platform === p)), backgroundColor: pcolor(p), stack: 's', yAxisID: 'y' })),
+    { type: 'line', label: T('lt_br'), data: brLine(hrs, (r, h) => r.hour === h), borderColor: '#0F8A5F', backgroundColor: '#0F8A5F', yAxisID: 'y2', tension: .25, spanGaps: true }] }, options: oh });
+  charts.c_lt_hour && (charts.c_lt_hour.options.scales.y2.stacked = false, charts.c_lt_hour.update());
+  const wds = [0, 1, 2, 3, 4, 5, 6]; const wdOf = r => s2d(r.day).getUTCDay();
+  const ow = opts({ stacked: true, y2: true }); ow.scales.y2.ticks = { callback: v => v + '%' }; ow.plugins.tooltip.callbacks.label = oh.plugins.tooltip.callbacks.label;
+  chart('c_lt_wd', { data: { labels: wds.map(wdName), datasets: [
+    ...plats.map(p => ({ type: 'bar', label: pname(p), data: wds.map(w => cnt(r => wdOf(r) === w && r.platform === p)), backgroundColor: pcolor(p), stack: 's', yAxisID: 'y' })),
+    { type: 'line', label: T('lt_br'), data: brLine(wds, (r, w) => wdOf(r) === w), borderColor: '#0F8A5F', backgroundColor: '#0F8A5F', yAxisID: 'y2', tension: .25, spanGaps: true }] }, options: ow });
+  charts.c_lt_wd && (charts.c_lt_wd.options.scales.y2.stacked = false, charts.c_lt_wd.update());
 }
 
 async function viewMonthly() {
