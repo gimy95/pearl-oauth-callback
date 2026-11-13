@@ -3,238 +3,447 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Pearl Clinic November 2026 Plan</title>
+<meta name="robots" content="noindex, nofollow">
+<title>Pearl Clinic November 2026 Media Plan</title>
 <style>
-:root{--bg:#f6f4f1;--card:#fff;--ink:#1d2433;--mute:#667085;--line:#e6e2dc;--acc:#0f766e;--warn:#b45309;--bad:#b42318;--good:#15803d;--bar:#0f766e;--bar2:#cbd5d1}
-@media (prefers-color-scheme:dark){:root{--bg:#12161d;--card:#1a2029;--ink:#e8ecf2;--mute:#9aa4b2;--line:#2a323f;--acc:#2dd4bf;--warn:#fbbf24;--bad:#f87171;--good:#4ade80;--bar:#2dd4bf;--bar2:#334155}}
+:root{--bg:#f6f4f1;--card:#fff;--ink:#1d2433;--mute:#667085;--line:#e6e2dc;--acc:#0f766e;--acc-soft:rgba(15,118,110,.08);--warn:#b45309;--bad:#b42318;--good:#15803d;--bar:#0f766e;--bar2:#e2e8e6;--tick:#1d2433}
+@media (prefers-color-scheme:dark){:root{--bg:#12161d;--card:#1a2029;--ink:#e8ecf2;--mute:#9aa4b2;--line:#2a323f;--acc:#2dd4bf;--acc-soft:rgba(45,212,191,.10);--warn:#fbbf24;--bad:#f87171;--good:#4ade80;--bar:#2dd4bf;--bar2:#334155;--tick:#e8ecf2}}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}
-.wrap{max-width:980px;margin:0 auto;padding:28px 16px 60px}
-h1{font-size:28px;margin:0 0 4px}
-h2{font-size:19px;margin:34px 0 12px;padding-bottom:6px;border-bottom:2px solid var(--acc)}
-.sub{color:var(--mute);margin:0 0 22px}
-.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
-.kpi{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
-.kpi b{display:block;font-size:24px}
-.kpi span{color:var(--mute);font-size:13px}
+.wrap{max-width:1040px;margin:0 auto;padding:24px 16px 60px}
+h1{font-size:26px;margin:0 0 4px}
+h2{font-size:19px;margin:36px 0 12px;padding-bottom:6px;border-bottom:2px solid var(--acc)}
+h3{font-size:15px;margin:18px 0 8px}
+.sub{color:var(--mute);margin:0 0 18px}
+.intro{background:var(--acc-soft);border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin:0 0 16px;font-size:14px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin:10px 0}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:11px 13px}
+.kpi b{display:block;font-size:22px;font-variant-numeric:tabular-nums}
+.kpi span{color:var(--mute);font-size:12.5px}
+.kpi.live{border-left:3px solid var(--acc)}
 .card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin:10px 0}
-.tw{overflow-x:auto}
-table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line);border-radius:10px;overflow:hidden;font-size:14px}
-th,td{padding:8px 10px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.tests{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px}
+.test h3{margin:0 0 2px}
+.test .cn{font-family:ui-monospace,Consolas,monospace;font-size:12px;color:var(--mute);word-break:break-all;margin-bottom:6px}
+.gate{margin-top:8px;padding:8px 10px;border-radius:8px;background:var(--acc-soft);font-size:13.5px}
+.tw{overflow-x:auto;border-radius:10px}
+table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line);font-size:13.5px}
+th,td{padding:7px 9px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap;font-variant-numeric:tabular-nums}
 th:first-child,td:first-child{text-align:left}
-th{background:rgba(15,118,110,.08);font-weight:600}
+td.l,th.l{text-align:left;white-space:normal}
+td.pc{text-align:left}
+th{background:var(--acc-soft);font-weight:600}
+tr.plat td{font-weight:700;background:var(--acc-soft)}
+tr.sub td:first-child{padding-left:22px}
+tr.extra td{color:var(--mute);font-style:italic}
+tr.tot td{font-weight:700;border-top:2px solid var(--acc)}
 tr:last-child td{border-bottom:0}
-.good{color:var(--good);font-weight:600}.bad{color:var(--bad);font-weight:600}.warn{color:var(--warn);font-weight:600}
-.bars{display:grid;gap:6px}
-.row{display:grid;grid-template-columns:90px 1fr 70px;align-items:center;gap:10px;font-size:14px}
-.track{background:var(--bar2);border-radius:5px;height:16px;overflow:hidden}
-.fill{background:var(--bar);height:100%}
-.fill.hot{background:var(--bad)}
+.good{color:var(--good);font-weight:600}.bad{color:var(--bad);font-weight:600}.warn{color:var(--warn);font-weight:600}.mute{color:var(--mute)}
+.pill{display:inline-block;padding:1px 8px;border-radius:99px;font-size:12px;font-weight:600;border:1px solid currentColor}
+.pbar{position:relative;display:inline-block;width:90px;height:10px;background:var(--bar2);border-radius:5px;vertical-align:middle;overflow:visible}
+.pbar i{position:absolute;left:0;top:0;bottom:0;background:var(--bar);border-radius:5px;max-width:100%}
+.pbar i.over{background:var(--bad)}
+.pbar s{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--tick);text-decoration:none}
 ul{margin:6px 0 6px 20px;padding:0}li{margin:4px 0}
-.tl{border-left:3px solid var(--acc);margin-left:6px;padding-left:16px}
-.tl div{margin:0 0 14px}.tl b{display:block}
+ul.check{list-style:none;margin-left:0}ul.check li{padding-left:24px;text-indent:-24px}
 .note{color:var(--mute);font-size:13px}
-@media(max-width:560px){.row{grid-template-columns:70px 1fr 56px}}
+.ar{direction:rtl;text-align:right;font-family:"Segoe UI",Tahoma,sans-serif}
+.tag{font-size:11px;font-weight:600;color:var(--mute);border:1px solid var(--line);border-radius:4px;padding:0 5px;margin-left:4px}
+@media(max-width:640px){.cols{grid-template-columns:1fr}h1{font-size:21px}}
 </style>
 </head>
 <body>
 <div class="wrap">
-<h1>Pearl Clinic: November 2026 Plan</h1>
-<p class="sub">Budget SAR 15,000 (hard cap, all platforms) · Data: Supabase, fresh through 31 Oct 2026 · Booking = every lead that ever booked</p>
+<h1>Pearl Clinic Al-Izdihar · November 2026 Media Plan</h1>
+<p class="sub">Built 1 Nov from Sep–Oct data, revised 13 Nov with the owner's decisions · Section 6 reads live data from the dashboard database</p>
+
+<div class="intro">
+<b>North-star KPI: cost per booking (CPB).</b> A booking is any lead that ever reached a booked stage (booked, booked/no-show, attended, attended/unpaid, paid).
+One person = one lead: the same phone within 30 days counts once, and it counts as booked if any of its records booked. Lead day = Riyadh date.
+Budget figures are <b>net media</b>; VAT 15% is paid on top. New ad groups count under their platform's budget.
+</div>
 
 <div class="kpis">
-  <div class="kpi"><b>15,000</b><span>SAR November cap</span></div>
-  <div class="kpi"><b>~430</b><span>SAR/day base spend</span></div>
+  <div class="kpi"><b>15,000</b><span>SAR net media cap</span></div>
+  <div class="kpi"><b>+2,250</b><span>VAT 15% · 17,250 invoiced</span></div>
   <div class="kpi"><b>75–90</b><span>target bookings</span></div>
   <div class="kpi"><b>≤ 190</b><span>target blended CPB (SAR)</span></div>
   <div class="kpi"><b>≤ 40</b><span>target CPL (SAR)</span></div>
+  <div class="kpi"><b>1,000</b><span>tests · 6.7% of budget</span></div>
+  <div class="kpi"><b>2,500</b><span>gated reserve · 16.7%</span></div>
+</div>
+<div class="kpis" id="liveKpis">
+  <div class="kpi live"><b>…</b><span>loading live pacing</span></div>
 </div>
 
-<h2>1. What history shows</h2>
-<div class="tw"><table>
-<tr><th>Month</th><th>Spend</th><th>Leads</th><th>Bookings</th><th>CPL</th><th>CPB</th><th>No-show rate</th></tr>
-<tr><td>Apr</td><td>16,102</td><td>862</td><td>26</td><td>18.7</td><td class="bad">619</td><td>35%</td></tr>
-<tr><td>May</td><td>25,653</td><td>442</td><td>33</td><td>58.0</td><td class="bad">777</td><td>33%</td></tr>
-<tr><td>Jun</td><td>27,345</td><td>676</td><td>29</td><td>40.5</td><td class="bad">943</td><td>10%</td></tr>
-<tr><td>Jul</td><td>11,781</td><td>302</td><td>92</td><td>39.0</td><td class="good">128</td><td>35%</td></tr>
-<tr><td>Aug</td><td>10,160</td><td>239</td><td>77</td><td>42.5</td><td class="good">132</td><td>33%</td></tr>
-<tr><td>Sep</td><td>16,878</td><td>394</td><td>70</td><td>42.8</td><td class="warn">241</td><td class="bad">44%</td></tr>
-<tr><td>Oct</td><td>9,941</td><td>285</td><td>52</td><td>34.9</td><td class="warn">191</td><td>too recent</td></tr>
-</table></div>
-<p class="note">Jan–Mar have spend only (no lead data). Apr–Jun CPB may not be comparable: CRM stage tracking then could not be verified. Oct attendance is not mature until about 15 Nov.</p>
-
+<h2>1 · What the data tells us</h2>
+<div class="cols">
 <div class="card">
-<b>Weekly CPB (SAR per booking)</b>
-<div class="bars" style="margin-top:8px">
-  <div class="row"><span>31 Aug</span><div class="track"><div class="fill" style="width:44%"></div></div><span>165</span></div>
-  <div class="row"><span>7 Sep</span><div class="track"><div class="fill" style="width:56%"></div></div><span>213</span></div>
-  <div class="row"><span>14 Sep</span><div class="track"><div class="fill" style="width:84%"></div></div><span>316</span></div>
-  <div class="row"><span>21 Sep</span><div class="track"><div class="fill hot" style="width:100%"></div></div><span>378</span></div>
-  <div class="row"><span>28 Sep</span><div class="track"><div class="fill" style="width:61%"></div></div><span>232</span></div>
-  <div class="row"><span>12 Oct</span><div class="track"><div class="fill" style="width:63%"></div></div><span>240</span></div>
-  <div class="row"><span>19 Oct</span><div class="track"><div class="fill" style="width:40%"></div></div><span>151</span></div>
-  <div class="row"><span>26 Oct</span><div class="track"><div class="fill" style="width:27%"></div></div><span>102</span></div>
-</div>
-<p class="note" style="margin-bottom:0">Week of 5 Oct omitted: ads were off 5–10 Oct (spend near zero).</p>
-</div>
-
+<h3 style="margin-top:0">✅ What works</h3>
 <ul>
-<li><b>More spend did not buy more bookings.</b> September spent about 6k more than August and booked fewer patients. Likely creative fatigue or saturation.</li>
-<li><b>The best months ran on 10–12k.</b> The campaigns launched 20 and 24 June are behind the July–August results.</li>
-<li><b>October had two outages:</b> ads off 5–10 Oct, and TikTok spend collapsed from 22 Oct, near zero by 30–31 Oct.</li>
-<li><b>Funnel leak after the lead:</b> October stages were 43% still "inquiry" and 22% "no answer". Sept–Oct no-shows ran 33–44%.</li>
-<li><b>Thu–Sat are weak:</b> 8–9 leads/day vs 13–15 on Sun and Tue, with flat spend (8 weeks of data, treat as a test).</li>
+<li><b>10–12k months were the best months.</b> July and August booked at about 130 SAR per booking. More spend in September bought fewer bookings.</li>
+<li><b>TikTok Male-All-Laser</b> is the workhorse: about 70% of TikTok lead spend at ~26 CPL.</li>
+<li><b>Women's 196–199 SAR laser offers</b> book at about 170–210 per booking on Snapchat. "Women 4 areas 199" is the best current Snapchat creative.</li>
+<li><b>Post-style ads</b> (TikTok Female TiktokPosts, Instagram IG Posts) give the cheapest leads. Judge them by CPB, not CPL.</li>
+<li><b>Leads that reach WhatsApp book 4× more often</b> (20% vs 4.5% on TikTok). Fast follow-up matters as much as the ad.</li>
 </ul>
-
-<h3>By platform, Sept + Oct combined</h3>
-<div class="tw"><table>
-<tr><th>Platform</th><th>Spend</th><th>CPL</th><th>CPB</th><th>Read</th></tr>
-<tr><td>TikTok</td><td>~10,745</td><td>~30</td><td class="good">~179</td><td style="text-align:left">Best proven performer</td></tr>
-<tr><td>Snapchat</td><td>~15,641</td><td>~58</td><td class="bad">~301</td><td style="text-align:left">About 1.7× TikTok per booking</td></tr>
-<tr><td>Meta</td><td>433</td><td>8.5</td><td class="good">87</td><td style="text-align:left">Unproven: 5 bookings, ~10% booking rate, 0 attended yet</td></tr>
-</table></div>
-
-<h2>2. Campaign, ad group and ad level (Sep + Oct)</h2>
-<p class="note">Spend is from the platform APIs (Snapchat converted USD × 3.75). CPL = platform-reported leads. Bookings are known per Snapchat ad only, because the CRM source field carries the Snapchat ad squad and ad name. TikTok and Meta leads arrive in the CRM as just "TikTok" / "Facebook", so their bookings cannot be tied to an ad group. The lead-form table that used to carry this stops at 12 Jul (Snapchat) and 14 May (TikTok).</p>
-
-<h3>TikTok</h3>
-<div class="tw"><table>
-<tr><th>Campaign › Ad group</th><th>Sep</th><th>Oct</th><th>Total</th><th>Leads</th><th>CPL</th><th>Last spend</th><th>Verdict</th></tr>
-<tr><td>Male All Offers › <b>Male-All-Laser</b></td><td>4,830</td><td>2,705</td><td>7,535</td><td>285</td><td class="good">26</td><td>31 Oct</td><td style="text-align:left">Workhorse: 70% of TikTok lead spend. Keep.</td></tr>
-<tr><td>Female All Offers › <b>Female TiktokPosts</b> (new 20 Oct)</td><td>0</td><td>640</td><td>640</td><td>50</td><td class="good">12.8</td><td>30 Oct</td><td style="text-align:left">Cheapest leads, only 11 days old. Judge by CPB, not CPL.</td></tr>
-<tr><td>Female All Offers › <b>Female-All-Laser</b></td><td>879</td><td>183</td><td>1,062</td><td>34</td><td>31</td><td>13 Oct</td><td style="text-align:left">Fine CPL, switched off 13 Oct. Restart with best ads.</td></tr>
-<tr><td>Female All Offers › <b>Female-Hydrafacial</b></td><td>1,232</td><td>276</td><td>1,508</td><td>13</td><td class="bad">116</td><td>18 Oct</td><td style="text-align:left">Stopped. Do not restart as is.</td></tr>
-<tr><td>Videoviews Female (campaign)</td><td>2,481</td><td>359</td><td>2,840</td><td>0</td><td>n/a</td><td>30 Oct</td><td style="text-align:left" class="bad">Zero leads. Real cash, but excluded from reports. Stop.</td></tr>
-<tr><td>Older 2026-01 / 04 ad groups</td><td colspan="3">~0</td><td>0</td><td>n/a</td><td>29 Oct</td><td style="text-align:left">Dormant.</td></tr>
-</table></div>
-<p class="note">TikTok best ads (CPL): Male 224 SAR 3-areas 23.5 (2,777 spend) and its Oct remake 24.3 (1,749); Male 199 2-areas 25.1; Female 196 4-areas 16.4 (147); post-style XERF ad 12.8. Worst: Hydrafacial 996 package 96, Hydrafacial + brightening 125, Male 1099 3-sessions in Oct 52.</p>
-<p class="note">Signal on lead quality (TikTok, Sep–Nov): leads that reached WhatsApp booked 20% (38 of 190); leads that stayed "tiktok leads" only booked 4.5% (6 of 134). Tags are added after contact, so this shows follow-up matters more than it proves cause.</p>
-
-<h3>Snapchat (one campaign, two ad squads)</h3>
-<div class="tw"><table>
-<tr><th>Ad squad</th><th>Spend Sep</th><th>Spend Oct</th><th>CPL Sep → Oct</th><th>CRM leads</th><th>Bookings</th><th>CPB</th><th>Att / Paid</th></tr>
-<tr><td><b>Laser Offer (All)</b></td><td>5,625</td><td>4,329</td><td>44 → 48</td><td>173</td><td>34</td><td class="bad">293</td><td>4 / 3</td></tr>
-<tr><td><b>Female Hydrafacial squad</b></td><td>4,313</td><td>1,375</td><td>48 → <span class="bad">66</span></td><td>95</td><td>18</td><td class="bad">316</td><td>6 / 6</td></tr>
-</table></div>
-<p class="note">Campaign: Snapchat-Lead-Generation-SA-RUH-All-Laser-Offer-20260620 (the only campaign delivering). The "Hydrafacial" squad mostly runs laser creatives, so its name no longer describes it. Oct attended/paid are immature. Hydrafacial squad CPL worsened 37% and its spend was already cut by two thirds in Oct.</p>
-
-<div class="tw"><table>
-<tr><th>Snapchat ad (creative)</th><th>Ran</th><th>Spend</th><th>CRM leads</th><th>Bookings</th><th>CPB</th><th>Verdict</th></tr>
-<tr><td>Male Laser Summer 224</td><td>1 Sep–7 Oct</td><td>5,723</td><td>113</td><td>16</td><td class="bad">358</td><td style="text-align:left">Biggest spend, worst big result. Cut.</td></tr>
-<tr><td>Female Laser Summer 199</td><td>1 Sep–7 Oct</td><td>2,930</td><td>60</td><td>14</td><td class="warn">209</td><td style="text-align:left">Decent. 3 paid.</td></tr>
-<tr><td>Women 4 areas 199 (Oct)</td><td>8–31 Oct</td><td>2,487</td><td>51</td><td>13</td><td class="good">191</td><td style="text-align:left">Best current. Lead creative.</td></tr>
-<tr><td>Male Laser Summer 199</td><td>1 Sep–7 Oct</td><td>1,303</td><td>17</td><td>5</td><td class="warn">261</td><td style="text-align:left">Weak.</td></tr>
-<tr><td>Hydrafacial + dermapen 550 (Oct)</td><td>8–31 Oct</td><td>618</td><td>5</td><td>1</td><td class="bad">618</td><td style="text-align:left">Stop.</td></tr>
-<tr><td>Men 3 sessions 1099 (Oct)</td><td>8–31 Oct</td><td>549</td><td>10</td><td>1</td><td class="bad">549</td><td style="text-align:left">Stop.</td></tr>
-<tr><td>National Day 4 areas 196</td><td>3 Sep–7 Oct</td><td>510</td><td>10</td><td>3</td><td class="good">170</td><td style="text-align:left">Good, 2 attended. Retest this offer.</td></tr>
-<tr><td>Men 3 areas 224 (Oct)</td><td>8–31 Oct</td><td>383</td><td>1</td><td>1</td><td>383</td><td style="text-align:left">Stop.</td></tr>
-<tr><td>Women 3 sessions 699 (Oct)</td><td>8–31 Oct</td><td>309</td><td>2</td><td>0</td><td class="bad">none</td><td style="text-align:left">Stop.</td></tr>
-<tr><td>Four small ads (122, 796, 96, 350)</td><td>various</td><td>714</td><td>4</td><td>1</td><td class="bad">poor</td><td style="text-align:left">Stop.</td></tr>
-</table></div>
-<p class="note">Pattern: women's 196–199 SAR laser offers book at about 170–210 per booking; men's offers run 260–550. The 8 Oct creative refresh launched six new ads and only one of them (women 4 areas 199) is working.</p>
-
-<h3>Meta (one campaign, one ad set)</h3>
-<div class="tw"><table>
-<tr><th>Campaign › Ad set</th><th>Ran</th><th>Spend</th><th>Clicks</th><th>Leads</th><th>CPL</th><th>Bookings</th></tr>
-<tr><td>Instagram LeadGen RUH Female <b>IG Posts</b> 20261024</td><td>24–31 Oct</td><td>433</td><td>234</td><td>50</td><td class="good">8.7</td><td>5 of 51 CRM leads, 0 attended</td></tr>
-<tr><td>Instagram LeadGen RUH Both <b>Laser JanOffer</b> (Jun)</td><td>12–23 Jun</td><td>553</td><td>360</td><td>57</td><td>9.7</td><td class="bad">0 bookings from 54 CRM leads</td></tr>
-<tr><td>Instagram Engagement Female IG Posts (Jul)</td><td>7–13 Jul</td><td>331</td><td>149</td><td>0</td><td>n/a</td><td>n/a</td></tr>
-</table></div>
-<p class="note">Same cheap-lead pattern as June, when Meta's 54 leads produced no bookings. Both the Meta and TikTok "posts" formats give cheap leads, so only count them as wins once bookings and attendance confirm it.</p>
-
-<h3>Stop list and budget already wasted</h3>
-<ul>
-<li>TikTok videoviews: 2,840 SAR for zero leads (September's true cash spend was about 19.4k, not 16.9k, once this is added).</li>
-<li>TikTok Hydrafacial ad group: 1,508 SAR for 13 leads.</li>
-<li>Snapchat October refresh losers: about 2,570 SAR across the ads marked Stop above, for 4 bookings.</li>
-<li>Snapchat Male Summer 224: 5,723 SAR at 358 per booking.</li>
-</ul>
-
-<h2>3. Allocation (cap 15,000 SAR)</h2>
-<div class="tw"><table>
-<tr><th>Bucket</th><th>SAR</th><th>Share</th><th>Per day</th><th>Role</th></tr>
-<tr><td>TikTok</td><td>5,500</td><td>37%</td><td>~185</td><td style="text-align:left">Core. Split Female / Male by their own CPB.</td></tr>
-<tr><td>Snapchat</td><td>3,500</td><td>23%</td><td>~115</td><td style="text-align:left">Cut from ~200/day. Keep only the best ad squads.</td></tr>
-<tr><td>Meta</td><td>2,500</td><td>17%</td><td>60 → 100</td><td style="text-align:left">Ramp by at most +20% a week.</td></tr>
-<tr><td>Creative tests</td><td>1,000</td><td>7%</td><td>~35</td><td style="text-align:left">New hooks and offers, 2–3 ads at a time.</td></tr>
-<tr><td><b>Gated reserve</b></td><td><b>2,500</b></td><td>17%</td><td>none</td><td style="text-align:left">Released only if the gates pass.</td></tr>
-<tr><td><b>Total</b></td><td><b>15,000</b></td><td>100%</td><td></td><td></td></tr>
-</table></div>
-<h3>Ad group level budgets (base 12,500 + tests)</h3>
-<div class="tw"><table>
-<tr><th>Platform › Ad group</th><th>SAR</th><th>Per day</th><th>What runs</th></tr>
-<tr><td>TikTok › Male-All-Laser</td><td>3,500</td><td>~115</td><td style="text-align:left">Best two ads: Male 224 3-areas and Male 199 2-areas. Drop the 1099 ad.</td></tr>
-<tr><td>TikTok › Female TiktokPosts</td><td>1,300</td><td>~43</td><td style="text-align:left">Post-style ads. Hold flat until 15 Nov CPB is known.</td></tr>
-<tr><td>TikTok › Female-All-Laser (restart)</td><td>700</td><td>~23</td><td style="text-align:left">Only the 196 SAR 4-areas ad and the 199 ad.</td></tr>
-<tr><td>TikTok › Hydrafacial and Videoviews</td><td>0</td><td>off</td><td style="text-align:left">Stopped. Anything spent here still counts against the 15,000.</td></tr>
-<tr><td>Snapchat › Laser Offer (All) squad</td><td>2,300</td><td>~77</td><td style="text-align:left">Women 4 areas 199 as lead ad (1,800). Men capped at 500 for one new creative.</td></tr>
-<tr><td>Snapchat › Female squad</td><td>1,200</td><td>~40</td><td style="text-align:left">Women 199 laser ads and the National Day 196 offer retest only.</td></tr>
-<tr><td>Meta › IG Posts ad set</td><td>2,500</td><td>60 → 100</td><td style="text-align:left">One ad set. Second ad set only after the 15 Nov gate.</td></tr>
-<tr><td>Creative tests (all platforms)</td><td>1,000</td><td>~35</td><td style="text-align:left">TikTok 400, Snapchat 300, Meta 300 (a lead-quality form step).</td></tr>
-<tr><td><b>Gated reserve</b></td><td><b>2,500</b></td><td>none</td><td style="text-align:left">Goes first to whichever ad group has the lowest CPB at the gate.</td></tr>
-</table></div>
-
-<h3>Expected leads by campaign and ad group</h3>
-<p class="note">Expected leads = budget ÷ assumed cost per lead. Proven ad groups use their Sep–Oct platform CPL. The two unproven groups (TikTok Posts, Meta) use observed CPL × 1.4 for expected, × 2 for conservative, because cheap early leads usually get dearer when spend scales. Conservative for proven groups = CPL + 25%. Platform-reported leads: the CRM counts about 7% fewer for TikTok and about 19% fewer for Snapchat.</p>
-<div class="tw"><table>
-<tr><th>Campaign › Ad group</th><th>Budget</th><th>Assumed CPL</th><th>Expected leads</th><th>Conservative</th></tr>
-<tr><td><b>TikTok Male All Offers</b></td><td><b>3,500</b></td><td></td><td><b>133</b></td><td><b>106</b></td></tr>
-<tr><td>&nbsp;&nbsp;› Male-All-Laser</td><td>3,500</td><td>26.4</td><td>133</td><td>106</td></tr>
-<tr><td><b>TikTok Female All Offers</b></td><td><b>2,000</b></td><td></td><td><b>95</b></td><td><b>69</b></td></tr>
-<tr><td>&nbsp;&nbsp;› Female TiktokPosts</td><td>1,300</td><td>17.9 (obs. 12.8)</td><td>73</td><td>51</td></tr>
-<tr><td>&nbsp;&nbsp;› Female-All-Laser</td><td>700</td><td>31.2</td><td>22</td><td>18</td></tr>
-<tr><td><b>Snapchat Laser Offer 20260620</b></td><td><b>3,500</b></td><td></td><td><b>71</b></td><td><b>56</b></td></tr>
-<tr><td>&nbsp;&nbsp;› Laser Offer (All) squad</td><td>2,300</td><td>47</td><td>49</td><td>39</td></tr>
-<tr><td>&nbsp;&nbsp;› Female squad</td><td>1,200</td><td>55</td><td>22</td><td>17</td></tr>
-<tr><td><b>Meta IG Posts 20261024</b></td><td><b>2,500</b></td><td>12.2 (obs. 8.7)</td><td><b>205</b></td><td><b>144</b></td></tr>
-<tr><td>Creative tests (3 platforms)</td><td>1,000</td><td>mixed</td><td>~41</td><td>~27</td></tr>
-<tr><td><b>Base total</b></td><td><b>12,500</b></td><td>~23 blended</td><td><b>~545</b></td><td><b>~400</b></td></tr>
-<tr><td>Reserve, if released</td><td>2,500</td><td>~35</td><td>~70</td><td>~55</td></tr>
-<tr><td><b>With reserve</b></td><td><b>15,000</b></td><td></td><td><b>~615</b></td><td><b>~455</b></td></tr>
-</table></div>
+</div>
 <div class="card">
-<b>What this implies for bookings.</b> At Sep–Oct booking rates (TikTok 17%, Snapchat 19%, Meta 10%), the base plan gives about 41 bookings from TikTok, 12 from Snapchat and 23 from Meta, roughly <b>76</b>, plus about 12 if the reserve is released. That lands inside the 75–90 target, but about 30% of it rests on Meta leads booking at 10%, which is unproven.
-<br><span class="note">Context: October produced 285 CRM leads on 9.9k at about 35 per lead. A blended 23 per lead in November only works if Meta keeps its cheap leads at scale. In the conservative case the blend is about 31 per lead.</span>
+<h3 style="margin-top:0">❌ Where money was wasted</h3>
+<ul>
+<li><b>TikTok video views:</b> 2,840 SAR in Sep–Oct for zero leads.</li>
+<li><b>TikTok Hydrafacial ad group:</b> 1,508 SAR for 13 leads.</li>
+<li><b>Snapchat Male Summer 224:</b> 5,723 SAR at 358 per booking.</li>
+<li><b>Snapchat 8 Oct refresh:</b> five of six new ads lost, about 2,570 SAR for 4 bookings.</li>
+<li><b>Outages:</b> ads off 5–10 Oct; TikTok near zero from 22 Oct; 1–2 Nov almost no delivery.</li>
+<li><b>Meta in June:</b> 54 cheap leads, zero bookings. Cheap leads are not wins until they book.</li>
+</ul>
+</div>
+</div>
+<div class="tw"><table id="hist"><tr><td class="mute">Loading monthly history…</td></tr></table></div>
+<p class="note">Live from the database with the 30-day rule. Apr–Jun bookings may not be comparable (CRM stage tracking then could not be verified). No-show rate = no-shows ÷ (attended + no-shows); recent months are not mature.</p>
+
+<h2>2 · Budget allocation — SAR 15,000 net (+ VAT)</h2>
+<div class="tw"><table>
+<tr><th>Bucket</th><th>Core</th><th>Tests</th><th>Platform cap</th><th>Share</th><th>Per day</th><th class="l">Role</th></tr>
+<tr><td>TikTok</td><td>5,500</td><td>400</td><td><b>5,900</b></td><td>39%</td><td>~197</td><td class="l">Core. Male and Female ad groups judged on their own CPB.</td></tr>
+<tr><td>Snapchat</td><td>3,500</td><td>300</td><td><b>3,800</b></td><td>25%</td><td>~127</td><td class="l">Cut from ~200/day. Best squads only.</td></tr>
+<tr><td>Meta</td><td>2,500</td><td>300</td><td><b>2,800</b></td><td>19%</td><td>60 → 100</td><td class="l">Ramp at most +20% a week, only while bookings follow.</td></tr>
+<tr><td>Gated reserve</td><td></td><td></td><td><b>2,500</b></td><td>17%</td><td>none</td><td class="l">Two tranches of 1,250 (15 and 22 Nov) if the gate passes.</td></tr>
+<tr class="tot"><td>Total</td><td>11,500</td><td>1,000</td><td>15,000</td><td>100%</td><td>500</td><td></td></tr>
+</table></div>
+<h3>Allocation logic</h3>
+<ul>
+<li><b>Proven 77%</b> (11,500): ad groups with Sep–Oct CPB evidence.</li>
+<li><b>Tests 7%</b> (1,000): any new ad group draws from its platform's test line first, then from that platform's core lines. It never adds to the 15,000.</li>
+<li><b>Reserve 17%</b> (2,500): unspent unless the gate in section 6 passes. It goes first to the line with the lowest CPB at the gate.</li>
+<li><b>Paused:</b> TikTok video views and the old TikTok Hydrafacial ad group. Any spend there still counts against the cap.</li>
+</ul>
+<h3>November budget by ad group (net of VAT)</h3>
+<div class="tw"><table>
+<tr><th>Platform › Ad group</th><th>Type</th><th>SAR</th><th>Per day</th><th>Exp. leads</th><th>Exp. bookings</th><th class="l">What runs</th></tr>
+<tr><td>TikTok › Male-All-Laser</td><td>core</td><td>3,500</td><td>~117</td><td>133</td><td>23</td><td class="l">Male 224 3-areas and Male 199 2-areas. No 1099 ad.</td></tr>
+<tr><td>TikTok › Female TiktokPosts</td><td>core</td><td>1,300</td><td>~43</td><td>73</td><td>12</td><td class="l">Post-style ads.</td></tr>
+<tr><td>TikTok › Female-All-Laser</td><td>core</td><td>700</td><td>~23</td><td>22</td><td>4</td><td class="l">196 SAR 4-areas and 199 ads.</td></tr>
+<tr><td>TikTok › new ad groups</td><td>test</td><td>400</td><td>~13</td><td>10</td><td>2</td><td class="l">Hydrafacial-Dermapen-Meso (from 8 Nov).</td></tr>
+<tr><td>Snapchat › Laser Offer (All) squad</td><td>core</td><td>2,300</td><td>~77</td><td>49</td><td>9</td><td class="l">Women 4 areas 199 leads. Men capped at 500.</td></tr>
+<tr><td>Snapchat › Female (hydrafacial-named) squad</td><td>core</td><td>1,200</td><td>~40</td><td>22</td><td>4</td><td class="l">Women 199 laser and the National Day 196 retest.</td></tr>
+<tr><td>Snapchat › new squads</td><td>test</td><td>300</td><td>~10</td><td>6</td><td>1</td><td class="l">Female-Laser and Male-Laser gender split (from 10 Nov).</td></tr>
+<tr><td>Meta › IG Posts ad sets</td><td>core</td><td>2,500</td><td>60 → 100</td><td>205</td><td>21</td><td class="l">IG Posts 20261024 and AUTHN 20261102.</td></tr>
+<tr><td>Meta › new ad sets</td><td>test</td><td>300</td><td>~10</td><td>25</td><td>2</td><td class="l">Laser and Hydrafacial AUTHN ad sets (from 10 Nov).</td></tr>
+<tr class="tot"><td>Base total</td><td></td><td>12,500</td><td>~417</td><td>~545</td><td>~78</td><td></td></tr>
+<tr><td>Reserve, if released</td><td>gated</td><td>2,500</td><td></td><td>~70</td><td>~12</td><td></td></tr>
+</table></div>
+<p class="note">Expected leads = budget ÷ Sep–Oct CPL (unproven lines use observed CPL × 1.4). Expected bookings use Sep–Oct booking rates: TikTok 17%, Snapchat 19%, Meta 10%. About a quarter of the base rests on Meta leads booking at 10%, which is still unproven.</p>
+
+<h2>3 · Test designs</h2>
+<div class="tests">
+<div class="card test">
+<h3>🎵 TikTok new ad group — SAR 400</h3>
+<div class="cn">Tiktok-Lead-Generation-SA-RUH-Female-All-Hydrafacial-Dermapen-Meso-20261108 · ~13/day</div>
+<ul>
+<li><b>Why:</b> Hydrafacial failed as a single-offer group (116 CPL). This tests a bundled skin offer with new creative.</li>
+<li><b>Setup:</b> Female, Riyadh, same instant form as Female-All-Laser. Two to three ads, one hook each.</li>
+<li><b>Measure:</b> CPL first, then CPB once 10 leads are in.</li>
+</ul>
+<div class="gate"><b>Gate on 15 Nov:</b> kill at 0 leads after 150 SAR, or CPL above 60. Keep if CPB ≤ 250 after 10 leads.</div>
+</div>
+<div class="card test">
+<h3>👻 Snapchat gender split — SAR 300</h3>
+<div class="cn">…Femle-Laser-Offer-…-20261110 and …Male-Laser-Offer-…-20261110 · ~10/day</div>
+<ul>
+<li><b>Why:</b> women's offers book at ~190 and men's at 260–550. Separate squads let each get its own budget.</li>
+<li><b>Setup:</b> same campaign (All-Laser-Offer-20260620), one lead form per gender, so the CRM source now names the form.</li>
+<li><b>Measure:</b> CPB per squad against the All squad.</li>
+</ul>
+<div class="gate"><b>Gate on 15 Nov:</b> if a split squad's CPB beats the All squad's, move up to 20% of the All squad's budget to it. Male squad: kill if CPB above 300 after 10 leads.</div>
+</div>
+<div class="card test">
+<h3>📸 Meta new ad sets — SAR 300</h3>
+<div class="cn">Instagram-LeadGeneration-SA-RUH-Female-IG-Posts-Laser/Hydrafacial-AUTHN-20261110 · ~10/day</div>
+<ul>
+<li><b>Why:</b> splitting the AUTHN ad set by offer shows which offer drives Meta bookings.</li>
+<li><b>Setup:</b> female, Riyadh, Instagram placements, lead form with one qualifying question (preferred branch/time) to raise lead quality.</li>
+<li><b>Measure:</b> booking rate, since Meta CPL is always cheap.</li>
+</ul>
+<div class="gate"><b>Gate on 22 Nov:</b> kill an ad set at booking rate below 8% after 25 leads. Keep if CPB ≤ 220.</div>
+</div>
+<div class="card test">
+<h3>🗓 Weekday timing — no extra budget</h3>
+<div class="cn">TikTok and Snapchat core lines · 16–29 Nov</div>
+<ul>
+<li><b>Why:</b> Thu–Sat bring fewer leads at flat spend. The dashboard's Lead Timing panel shows Tuesday busiest and Sunday quietest so far in November.</li>
+<li><b>Setup:</b> +20% budget on the two strongest weekdays, −20% on the two weakest, same weekly total.</li>
+<li><b>Measure:</b> CPB by weekday against 1–15 Nov.</li>
+</ul>
+<div class="gate"><b>Read on 29 Nov:</b> keep the schedule only if blended CPB falls at least 10%.</div>
+</div>
 </div>
 
+<h2>4 · Before launch &amp; creative brief</h2>
+<div class="cols">
 <div class="card">
-<b>Reserve gates.</b> Release 1,250 on 15 Nov and 1,250 on 22 Nov (the White Friday push, 23–30 Nov). Each release needs all three, on a rolling 7 days:
-<ul><li>Blended CPB 200 SAR or lower</li><li>Booking rate 15% or higher</li><li>No-show rate not rising</li></ul>
-If a gate fails, the reserve stays unspent.
+<h3 style="margin-top:0">Checklist</h3>
+<ul class="check">
+<li>☑ <b>2 Nov</b> · Delivery fixed on all three platforms after 1–2 Nov near-zero spend.</li>
+<li>☑ <b>Nov</b> · TikTok video views off (no video-view spend in November).</li>
+<li>☑ <b>10 Nov</b> · Snapchat CRM source carries the lead form and campaign, so Snapchat bookings tie to a squad.</li>
+<li>☑ <b>13 Nov</b> · TikTok lead lists sync daily and match the CRM by phone (111 of 111 November leads tied).</li>
+<li>☑ <b>13 Nov</b> · 30-day one-person rule applied to dashboard and WhatsApp report.</li>
+<li>☐ <b>15 Nov</b> · Meta lead export: still a manual CSV. Needs a long-lived Meta token to automate.</li>
+<li>☐ <b>15 Nov</b> · Leads with no CRM source (9 so far, 8 booked): set the source when entering the lead.</li>
+<li>☐ <b>15 Nov</b> · WhatsApp reminders 24 h and 2 h before each appointment.</li>
+<li>☐ <b>15 Nov</b> · Answer leads within 5 minutes; three touches over two days.</li>
+<li>☐ <b>Ongoing</b> · Naming: <span class="mute">Platform-Objective-SA-RUH-Gender-Offer-YYYYMMDD</span> on every new campaign and ad group.</li>
+</ul>
+</div>
+<div class="card">
+<h3 style="margin-top:0">Creative brief (new assets)</h3>
+<ul>
+<li><b>TikTok:</b> 2 post-style videos for women (199 laser, 4 areas), 1 remake of Male 224 3-areas with a new hook. Arabic voice-over, price in the first 2 seconds.</li>
+<li><b>Snapchat:</b> 2 variants of Women 4 areas 199 (new opener), 1 men's 224 ad for the Male squad. Vertical, 6–10 s.</li>
+<li><b>Meta:</b> 3 authentic-style posts (clinic, staff, before/after where allowed) for the AUTHN ad sets.</li>
+<li><b>White Friday (23–30 Nov):</b> one offer across all platforms, ready by 20 Nov.</li>
+<li><b>Retire:</b> Male 1099 3-sessions, Hydrafacial 996, Hydrafacial + dermapen 550, Women 3 sessions 699, Men 3 areas 224 (Oct Snapchat).</li>
+</ul>
+</div>
 </div>
 
-<h2>4. Calendar</h2>
-<div class="tl">
-<div><b>2–3 Nov · Fix delivery first</b>Zero spend on 1–2 Nov and only one TikTok ad group in delivery. Confirm Snapchat, TikTok and Meta are live with correct daily budgets.</div>
-<div><b>3–14 Nov · Stabilise</b>Run the base allocation, ramp Meta, review CPB per platform weekly.</div>
-<div><b>15 Nov · First checkpoint</b>October attendance is mature enough to judge Meta and Snapchat quality. Decide first reserve release.</div>
-<div><b>16–22 Nov · Rebalance</b>Move 20% steps from the worst-CPB platform to the best. Promote winning test creative.</div>
-<div><b>23–30 Nov · White Friday</b>Concentrate spend on the best offer. Release second tranche if gates pass.</div>
+<h2>5 · Optimization rules &amp; calendar</h2>
+<div class="cols">
+<div class="card">
+<h3 style="margin-top:0">Always-on rules</h3>
+<ul>
+<li><b>Pause</b> an ad group at 450 SAR spent with 0 bookings, or CPB above 285 (1.5× target) after 30 leads.</li>
+<li><b>Refresh creative</b> at frequency above 5, or CTR falling 7 days in a row.</li>
+<li><b>Budget steps</b> of ±20% at most, no more than one change per line per 3 days.</li>
+<li><b>Scale</b> a line only when its 7-day CPB is ≤ 190 and it has at least 5 bookings.</li>
+<li><b>Platform cap:</b> stop scaling a platform once its projected month-end spend reaches its cap (section 6).</li>
+<li><b>Lead chase:</b> any lead still "inquiry" after 48 hours gets a call and a WhatsApp.</li>
+</ul>
+</div>
+<div class="card">
+<h3 style="margin-top:0">Calendar (Sunday reviews)</h3>
+<ul>
+<li><b>1–7 Nov</b> · Fix delivery, run the base allocation, ramp Meta.</li>
+<li><b>Sun 8 Nov</b> · First weekly review: pacing per platform, kill obvious losers.</li>
+<li><b>Sun 15 Nov · Mid-month gate</b> · Test gates, reserve tranche 1 (1,250), October attendance mature.</li>
+<li><b>Sun 22 Nov</b> · Reserve tranche 2 (1,250), Meta test gate, move 20% steps from worst to best CPB line.</li>
+<li><b>23–30 Nov · White Friday</b> · Concentrate on the best offer and line.</li>
+<li><b>Sun 29 Nov</b> · Weekday test read-out.</li>
+<li><b>30 Nov</b> · Wrap-up: final CPB per line, December carry-over.</li>
+</ul>
+</div>
 </div>
 
-<h2>5. Targets and kill rules</h2>
-<ul>
-<li><b>Pause a platform or ad set</b> if CPB is above 1.5× the account average (about 285) after at least 30 leads.</li>
-<li><b>Pause an ad</b> at frequency above 5, or CTR falling for 7 days.</li>
-<li><b>Scale a winner</b> by at most +20% per change.</li>
-<li><b>Meta check:</b> if 25 or more November leads show no attendance by 20 Nov, hold it at its 15 Nov level.</li>
-<li><b>Weekday test:</b> bias +20% Sun–Tue and −20% Thu–Sat on TikTok and Snapchat for two weeks, then compare CPB.</li>
-</ul>
-
-<h2>6. Not spend, but worth more than spend</h2>
-<ul>
-<li><b>Cut no-shows.</b> WhatsApp reminders 24 hours and 2 hours before each appointment. Going from about 40% to 25% no-shows is worth as much as a 25% cut in CPB.</li>
-<li><b>Answer leads within 5 minutes,</b> with a three-touch follow-up over two days.</li>
-</ul>
-
-<h2>7. Gaps</h2>
-<ul>
-<li>TikTok and Meta bookings can't be tied to an ad group or ad. Fix: ingest the lead forms again (stale since May and July) or put the ad name in the CRM source field, as Snapchat already does.</li>
-<li>No revenue or ticket data, so ROAS and break-even CPB are unknown. Provide the average ticket to set CPB limits from it.</li>
-<li>Snapchat campaign names are missing in the data, so individual Snapchat campaigns can't be ranked.</li>
-<li>October attended and paid counts (3 and 3) are far too early to read.</li>
-</ul>
-<p class="note">Proposal only: no live campaign or budget was changed.</p>
+<h2>6 · Live pacing — plan vs actual (1–30 Nov)</h2>
+<div class="card">
+<b>How to read this.</b> Spend comes from the platform APIs; leads and bookings come from the CRM with the 30-day rule. The bar shows spend against the line's month budget, and the tick marks where an even daily pace should be today.
+"Expected" = budget × days with data ÷ 30. Pace: <span class="good">on pace</span> 85–110% of expected, <span class="warn">under</span> or <span class="bad">over</span> outside that.
+Leads and bookings per ad group are those tied to an ad; the rest show as "not tied" or "no source".
+<p class="ar" style="margin:8px 0 0">قراءة الجدول: الإنفاق من منصات الإعلانات، والعملاء والحجوزات من نظام CRM (الرقم نفسه خلال 30 يوماً يُحسب عميلاً واحداً). الشريط يوضح الإنفاق مقابل ميزانية الشهر، والعلامة تبيّن أين يجب أن يكون الإنفاق اليوم بوتيرة يومية متساوية. المبالغ صافية بدون ضريبة القيمة المضافة.</p>
 </div>
+<p class="note" id="fresh">Checking data freshness…</p>
+<div class="tw"><table id="pace"><tr><td class="mute">Loading…</td></tr></table></div>
+
+<h3>Reserve gate (rolling 7 days, live)</h3>
+<div class="card" id="gate">Loading…</div>
+
+<h2>7 · Open decisions &amp; data gaps</h2>
+<ul>
+<li><b>Releasing the reserve</b> needs the owner's OK even when the gate passes.</li>
+<li><b>Leads with no CRM source</b> show as their own row, outside any platform's numbers.</li>
+<li><b>Snapchat leads with an empty CRM source</b> can't be tied to a squad: Snapchat no longer offers a lead list, only the form name in the source.</li>
+<li><b>TikTok</b> bookings are tied at ad group level only: TikTok lead lists don't name the ad.</li>
+<li><b>Meta</b> spend lags one day; Meta leads are matched from manual CSV exports.</li>
+<li><b>Lead hour:</b> some leads carry the time they were entered into the CRM, not when they arrived (a 15:00 batch on 11 Nov).</li>
+<li><b>No revenue data,</b> so break-even CPB is unknown. Average ticket would let the CPB limits be set from margin.</li>
+</ul>
+<p class="note">Plan only: no live campaign or budget is changed from this page.</p>
+</div>
+
+<script>
+'use strict';
+const SB_URL = 'https://bnbleiepzkxleeohugpm.supabase.co';
+const SB_KEY = 'sb_publishable_yg1uyRyFF_4aDCsaAbQYLg_WwBHaT9o';   // publishable key: access is enforced in the database
+const M0 = '2026-11-01', M1 = '2026-11-30', DAYS = 30;
+const TARGET_CPB = 190, GATE_CPB = 200, GATE_RATE = 0.15;
+const TRANCHES = [{ from: '2026-11-15', sar: 1250 }, { from: '2026-11-22', sar: 1250 }];
+
+// Plan lines. Ad groups are matched by name; anything unmatched on a platform falls into its "new" (test) line.
+const LINES = [
+  { id: 't_male',  plat: 'tiktok',   name: 'Male-All-Laser',               kind: 'core', sar: 3500, bk: 23, re: /-Male-All-Laser/ },
+  { id: 't_posts', plat: 'tiktok',   name: 'Female TiktokPosts',           kind: 'core', sar: 1300, bk: 12, re: /TiktokPosts/i },
+  { id: 't_flas',  plat: 'tiktok',   name: 'Female-All-Laser',             kind: 'core', sar: 700,  bk: 4,  re: /Female-All-Laser/i },
+  { id: 't_new',   plat: 'tiktok',   name: 'New ad groups (test)',         kind: 'test', sar: 400,  bk: 2,  re: null },
+  { id: 's_all',   plat: 'snapchat', name: 'Laser Offer (All) squad',      kind: 'core', sar: 2300, bk: 9,  re: /All-Laser-Offer-Targeted/i },
+  { id: 's_fem',   plat: 'snapchat', name: 'Female (hydrafacial-named) squad', kind: 'core', sar: 1200, bk: 4, re: /hydrafacial/i },
+  { id: 's_new',   plat: 'snapchat', name: 'New squads (test)',            kind: 'test', sar: 300,  bk: 1,  re: null },
+  { id: 'm_core',  plat: 'meta',     name: 'IG Posts ad sets',             kind: 'core', sar: 2500, bk: 21, re: /^(?!.*20261110).*IG-Posts/i },
+  { id: 'm_new',   plat: 'meta',     name: 'New ad sets (test)',           kind: 'test', sar: 300,  bk: 2,  re: null },
+];
+const PLATS = [['tiktok', 'TikTok'], ['snapchat', 'Snapchat'], ['meta', 'Meta']];
+
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const f0 = (n) => n == null || !isFinite(n) ? '–' : Math.round(n).toLocaleString('en-US');
+const f1 = (n) => n == null || !isFinite(n) ? '–' : n.toLocaleString('en-US', { maximumFractionDigits: 1 });
+const pct = (n) => n == null || !isFinite(n) ? '–' : Math.round(n * 100) + '%';
+const dnum = (d) => Number(String(d).slice(8, 10));
+const addDays = (d, n) => { const x = new Date(d + 'T00:00:00Z'); x.setUTCDate(x.getUTCDate() + n); return x.toISOString().slice(0, 10); };
+function riyadhToday() { return new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Riyadh', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date()); }
+
+async function rpc(fn, args) {
+  let out = [], from = 0; const page = 1000;
+  for (;;) {
+    const r = await fetch(`${SB_URL}/rest/v1/rpc/${fn}`, { method: 'POST',
+      headers: { apikey: SB_KEY, Authorization: 'Bearer ' + SB_KEY, 'Content-Type': 'application/json', Range: `${from}-${from + page - 1}` },
+      body: JSON.stringify(args || {}) });
+    if (!r.ok) throw new Error(fn + ' ' + r.status);
+    const data = await r.json(); out = out.concat(data);
+    if (data.length < page) break; from += page;
+  }
+  return out;
+}
+
+function lineFor(row) {
+  const own = LINES.filter(l => l.plat === row.platform);
+  return own.find(l => l.re && l.re.test(row.adgroup_name || '')) || own.find(l => !l.re);
+}
+
+function cpbCell(sp, b) {
+  if (!b) return sp > 0 ? '<span class="mute">–</span>' : '–';
+  const v = sp / b; return `<span class="${v <= TARGET_CPB ? 'good' : v <= TARGET_CPB * 1.5 ? 'warn' : 'bad'}">${f0(v)}</span>`;
+}
+function paceCell(spend, budget, dd) {
+  if (!budget) return spend > 0 ? '<span class="pill bad">unplanned</span>' : '';
+  const exp = budget * dd / DAYS; const r = exp ? spend / exp : 0;
+  const w = Math.min(100, spend / budget * 100), tick = Math.min(100, dd / DAYS * 100);
+  const cls = spend > budget ? 'bad' : r > 1.10 ? 'bad' : r < 0.85 ? 'warn' : 'good';
+  const lab = spend > budget ? 'over budget' : r > 1.10 ? 'over' : r < 0.85 ? 'under' : 'on pace';
+  return `<span class="pbar"><i class="${spend > budget ? 'over' : ''}" style="width:${w}%"></i><s style="left:${tick}%"></s></span> <span class="${cls}">${pct(r)} ${lab}</span>`;
+}
+
+function renderHistory(daily) {
+  const m = {};
+  for (const r of daily) { const k = r.day.slice(0, 7); if (k < '2026-04' || k > '2026-10') continue;
+    const z = m[k] = m[k] || { sp: 0, l: 0, b: 0, a: 0, ns: 0 };
+    z.sp += +r.spend_sar || 0; z.l += +r.leads || 0; z.b += +r.bookings || 0; z.a += +r.attended || 0; z.ns += +r.no_shows || 0; }
+  const ks = Object.keys(m).sort();
+  const name = (k) => new Date(k + '-01T00:00:00Z').toLocaleString('en-US', { month: 'short', timeZone: 'UTC' });
+  $('hist').innerHTML = '<tr><th>Month</th><th>Spend</th><th>Leads</th><th>Bookings</th><th>CPL</th><th>CPB</th><th>Booking rate</th><th>No-show rate</th></tr>' +
+    ks.map(k => { const z = m[k]; const den = z.a + z.ns;
+      return `<tr><td>${name(k)}</td><td>${f0(z.sp)}</td><td>${f0(z.l)}</td><td>${f0(z.b)}</td><td>${f1(z.l ? z.sp / z.l : null)}</td><td>${cpbCell(z.sp, z.b)}</td><td>${pct(z.l ? z.b / z.l : null)}</td><td>${den >= 10 ? pct(z.ns / den) : '<span class="mute">too early</span>'}</td></tr>`; }).join('');
+}
+
+function render(info, daily, ads) {
+  const today = riyadhToday();
+  const nowEnd = today < M1 ? today : M1;
+  const lastDay = {}; for (const r of info) lastDay[r.source] = String(r.last_data_day || '').slice(0, 10);
+  const dd = (src) => { const d = lastDay[src]; if (!d || d < M0) return 0; return dnum(d > nowEnd ? nowEnd : d); };
+  const ddCrm = dd('crm');
+
+  // actuals per line / platform
+  const L = Object.fromEntries(LINES.map(l => [l.id, { sp: 0, l: 0, b: 0, groups: {} }]));
+  for (const r of ads) {
+    if (String(r.month).slice(0, 7) !== '2026-11') continue;
+    const ln = lineFor(r); if (!ln) continue; const z = L[ln.id];
+    const sp = +r.spend_sar || 0, l = +r.crm_leads || 0, b = +r.crm_bookings || 0;
+    z.sp += sp; z.l += l; z.b += b;
+    const g = z.groups[r.adgroup_name || '(no ad group)'] = z.groups[r.adgroup_name || '(no ad group)'] || { sp: 0, l: 0, b: 0, vv: false };
+    g.sp += sp; g.l += l; g.b += b; if (r.is_video_views && sp > 0) g.vv = true;
+  }
+  const P = {}; for (const r of daily) { if (r.day < M0 || r.day > M1) continue;
+    const z = P[r.platform] = P[r.platform] || { sp: 0, l: 0, b: 0 }; z.sp += +r.spend_sar || 0; z.l += +r.leads || 0; z.b += +r.bookings || 0; }
+
+  let rows = '', tot = { budget: 0, sp: 0, l: 0, b: 0, bk: 0 };
+  for (const [p, label] of PLATS) {
+    const lines = LINES.filter(l => l.plat === p);
+    const budget = lines.reduce((a, l) => a + l.sar, 0), bkPlan = lines.reduce((a, l) => a + l.bk, 0);
+    const d = dd('spend:' + p), z = P[p] || { sp: 0, l: 0, b: 0 };
+    const proj = d ? z.sp / d * DAYS : null;
+    rows += `<tr class="plat"><td>${label} <span class="tag">${d ? 'spend to ' + d + ' Nov' : 'no Nov spend yet'}</span></td><td>${f0(budget)}</td><td>${f0(z.sp)}</td><td>${f0(budget * d / DAYS)}</td><td class="pc">${paceCell(z.sp, budget, d)}</td><td class="${proj > budget * 1.02 ? 'bad' : ''}">${f0(proj)}</td><td>${f0(z.l)}</td><td>${f0(z.b)} <span class="mute">/ ${bkPlan}</span></td><td>${ddCrm ? f0(z.b / ddCrm * DAYS) : '–'}</td><td>${cpbCell(z.sp, z.b)}</td></tr>`;
+    let tied = { l: 0, b: 0 };
+    for (const ln of lines) {
+      const a = L[ln.id]; tied.l += a.l; tied.b += a.b;
+      rows += `<tr class="sub"><td>${esc(ln.name)} <span class="tag">${ln.kind}</span></td><td>${f0(ln.sar)}</td><td>${f0(a.sp)}</td><td>${f0(ln.sar * d / DAYS)}</td><td class="pc">${paceCell(a.sp, ln.sar, d)}</td><td>${d ? f0(a.sp / d * DAYS) : '–'}</td><td>${f0(a.l)}</td><td>${f0(a.b)} <span class="mute">/ ${ln.bk}</span></td><td></td><td>${cpbCell(a.sp, a.b)}</td></tr>`;
+      const gs = Object.entries(a.groups).filter(([, g]) => g.sp > 0 || g.l > 0).sort((x, y) => y[1].sp - x[1].sp);
+      if (gs.length > 1 || (gs.length === 1 && !ln.re)) for (const [gn, g] of gs)
+        rows += `<tr class="sub extra"><td style="padding-left:40px;white-space:normal;max-width:340px">↳ ${esc(gn)}${g.vv ? ' <span class="pill bad">video views</span>' : ''}</td><td></td><td>${f0(g.sp)}</td><td></td><td></td><td></td><td>${f0(g.l)}</td><td>${f0(g.b)}</td><td></td><td>${cpbCell(g.sp, g.b)}</td></tr>`;
+    }
+    const ul = z.l - tied.l, ub = z.b - tied.b;
+    if (ul > 0 || ub > 0) rows += `<tr class="sub extra"><td>Not tied to an ad group</td><td></td><td></td><td></td><td></td><td></td><td>${f0(ul)}</td><td>${f0(ub)}</td><td></td><td></td></tr>`;
+    tot.budget += budget; tot.sp += z.sp; tot.l += z.l; tot.b += z.b; tot.bk += bkPlan;
+  }
+  const u = P.unknown || { sp: 0, l: 0, b: 0 };
+  rows += `<tr class="plat"><td>No source in CRM</td><td></td><td></td><td></td><td></td><td></td><td>${f0(u.l)}</td><td>${f0(u.b)}</td><td>${ddCrm ? f0(u.b / ddCrm * DAYS) : '–'}</td><td></td></tr>`;
+  tot.l += u.l; tot.b += u.b;
+
+  // gate
+  const minSpendDay = ['spend:tiktok', 'spend:snapchat', 'spend:meta'].map(s => lastDay[s]).filter(Boolean).sort()[0] || today;
+  const gEnd = [addDays(today, -1), minSpendDay, lastDay.crm || today].sort()[0], gStart = addDays(gEnd, -6);
+  const g = { sp: 0, l: 0, b: 0 };
+  for (const r of daily) if (r.day >= gStart && r.day <= gEnd) { g.sp += +r.spend_sar || 0; g.l += +r.leads || 0; g.b += +r.bookings || 0; }
+  const nov = { a: 0, ns: 0 }, oct = { a: 0, ns: 0 };
+  for (const r of daily) { const t = r.day.slice(0, 7) === '2026-11' ? nov : r.day.slice(0, 7) === '2026-10' ? oct : null; if (t) { t.a += +r.attended || 0; t.ns += +r.no_shows || 0; } }
+  const gCpb = g.b ? g.sp / g.b : Infinity, gRate = g.l ? g.b / g.l : 0;
+  const nsN = nov.a + nov.ns, nsO = oct.a + oct.ns;
+  const nsNov = nsN ? nov.ns / nsN : null, nsOct = nsO ? oct.ns / nsO : null;
+  const nsOk = nsN < 10 ? null : nsOct == null ? true : nsNov <= nsOct + 0.02;
+  const pass = gCpb <= GATE_CPB && gRate >= GATE_RATE && nsOk !== false;
+  const ok = (b) => b === null ? '<span class="warn">too early</span>' : b ? '<span class="good">✓ pass</span>' : '<span class="bad">✗ fail</span>';
+  const released = TRANCHES.filter(t => today >= t.from);
+  $('gate').innerHTML = `<div class="tw"><table>
+    <tr><th>Condition (${gStart.slice(8)}–${gEnd.slice(8)} Nov)</th><th>Actual</th><th>Rule</th><th>Result</th></tr>
+    <tr><td>Blended CPB (all platforms, incl. no-source bookings)</td><td>${f0(gCpb)}</td><td>≤ ${GATE_CPB}</td><td>${ok(gCpb <= GATE_CPB)}</td></tr>
+    <tr><td>Booking rate (bookings ÷ leads)</td><td>${pct(gRate)} <span class="mute">(${g.b} of ${g.l})</span></td><td>≥ ${pct(GATE_RATE)}</td><td>${ok(gRate >= GATE_RATE)}</td></tr>
+    <tr><td>No-show rate not rising (Nov vs Oct)</td><td>${nsN >= 10 ? pct(nsNov) : '<span class="mute">n=' + nsN + '</span>'} <span class="mute">vs ${pct(nsOct)}</span></td><td>≤ Oct + 2 pts</td><td>${ok(nsOk)}</td></tr>
+  </table></div>
+  <p style="margin:10px 0 0"><b>Gate today: ${pass ? '<span class="good">PASS</span>' : '<span class="bad">FAIL</span>'}</b>${nsOk === null ? ' <span class="mute">(no-show check waits for at least 10 completed appointments)</span>' : ''}.
+  Tranche 1 (1,250 SAR) opens Sun 15 Nov, tranche 2 (1,250 SAR) opens Sun 22 Nov.
+  ${released.length ? `Open now: ${released.length} tranche(s), ${f0(released.reduce((a, t) => a + t.sar, 0))} SAR, released only with the owner's OK.` : 'No tranche is open yet.'}
+  ${pass ? 'If released, it goes first to the line with the lowest CPB in the table above.' : 'The reserve stays unspent while the gate fails.'}</p>
+  <p class="note" style="margin:6px 0 0">The window ends on the last day with spend from every platform and CRM data, so Meta's one-day lag doesn't make CPB look better.</p>`;
+
+  // reserve + totals rows
+  const resOpen = released.reduce((a, t) => a + t.sar, 0);
+  rows += `<tr class="plat"><td>Gated reserve <span class="tag">${pass ? 'gate passes' : 'gate fails'}</span></td><td>2,500</td><td></td><td></td><td class="l"><span class="mute">${resOpen ? f0(resOpen) + ' SAR open, needs owner OK' : 'opens 15 Nov'}</span></td><td></td><td></td><td><span class="mute">/ 12</span></td><td></td><td></td></tr>`;
+  const dAll = Math.max(...PLATS.map(([p]) => dd('spend:' + p)));
+  const projAll = PLATS.reduce((a, [p]) => { const d = dd('spend:' + p); return a + (d ? (P[p] || { sp: 0 }).sp / d * DAYS : 0); }, 0);
+  const projB = ddCrm ? tot.b / ddCrm * DAYS : null;
+  rows += `<tr class="tot"><td>Total (base 12,500 + reserve)</td><td>15,000</td><td>${f0(tot.sp)}</td><td>${f0(12500 * dAll / DAYS)}</td><td class="pc">${paceCell(tot.sp, 12500, dAll)}</td><td class="${projAll > 12500 ? 'bad' : ''}">${f0(projAll)}</td><td>${f0(tot.l)}</td><td>${f0(tot.b)} <span class="mute">/ ${tot.bk}</span></td><td>${f0(projB)}</td><td>${cpbCell(tot.sp, tot.b)}</td></tr>`;
+
+  $('pace').innerHTML = `<tr><th>Line</th><th>Budget</th><th>Spend</th><th>Expected</th><th class="l">Pace vs budget</th><th>Proj. month-end</th><th>Leads</th><th>Bookings / plan</th><th>Proj. bookings</th><th>CPB</th></tr>` + rows;
+  $('fresh').innerHTML = `Data: TikTok spend to ${esc(lastDay['spend:tiktok'] || '–')}, Snapchat to ${esc(lastDay['spend:snapchat'] || '–')}, Meta to ${esc(lastDay['spend:meta'] || '–')}, CRM to ${esc(lastDay.crm || '–')}. Today (Riyadh) ${esc(today)}. Budgets and spend are net of VAT.`;
+
+  const cpb = tot.b ? tot.sp / tot.b : null;
+  $('liveKpis').innerHTML = [
+    [f0(tot.sp), `SAR spent to date · ${pct(tot.sp / 15000)} of cap`],
+    [f0(projAll), `projected month-end spend (base ${f0(12500)})`],
+    [f0(tot.b), `bookings so far · plan ~78 base`],
+    [f0(projB), 'projected bookings at this pace'],
+    [`<span class="${cpb <= TARGET_CPB ? 'good' : 'bad'}">${f0(cpb)}</span>`, 'CPB month to date (target ≤ 190)'],
+    [f1(tot.l ? tot.sp / tot.l : null), 'CPL month to date (target ≤ 40)'],
+    [pass ? '<span class="good">PASS</span>' : '<span class="bad">FAIL</span>', 'reserve gate, rolling 7 days'],
+  ].map(([b, s]) => `<div class="kpi live"><b>${b}</b><span>${esc(s)}</span></div>`).join('');
+}
+
+(async () => {
+  try {
+    const today = riyadhToday();
+    const [info, daily, ads] = await Promise.all([
+      rpc('dash_info', {}), rpc('dash_daily', { p_start: '2026-04-01', p_end: today }), rpc('dash_ads', { p_start: M0, p_end: M1 })]);
+    const d = daily.map(r => ({ ...r, day: String(r.day).slice(0, 10) }));
+    renderHistory(d);
+    render(info, d, ads);
+  } catch (e) {
+    console.error(e);
+    const msg = '<tr><td class="bad">Live data could not be loaded. The dashboard may be switched off, or the network blocked the request.</td></tr>';
+    $('pace').innerHTML = msg; $('hist').innerHTML = msg; $('gate').textContent = 'Live data unavailable.';
+    $('liveKpis').innerHTML = '<div class="kpi live"><b>–</b><span>live data unavailable</span></div>'; $('fresh').textContent = '';
+  }
+})();
+</script>
 </body>
 </html>
